@@ -1,0 +1,62 @@
+<div>
+  <form [formGroup]="rForm" id="createPost" (ngSubmit)="this.modifyAndPost(this.rForm)">
+    <div *ngIf="postState === 0">
+      <h4>Which department does this belong to?</h4>
+      
+      <input type="button" value="electrical" (click)="selectDepartment($event)"  id="electrical">
+    
+      <input type=button value="scenery" (click)="selectDepartment($event)" id="scenery"  >scenery 
+      <input type=button value="whatever" (click)="selectDepartment($event)" id="whatever" >Whatever
+
+    </div>
+    <div *ngIf="postState === 1">
+      <h4>Now which sub-department</h4>
+      
+      <ng-container *ngFor="let post of postSelections; let i = index">
+        <input type=button (click)="selectSubDepartment($event)" value ={{this.postSelections[i]}} id={{post}} formControlName="subDepartment" >{{post}}
+      </ng-container>
+
+    </div>
+    <div *ngIf="postState === 2">
+      <h4>Select the best category for your post</h4>
+      <ng-container *ngFor="let post of postSelections; let i = index">
+
+        <button (click)="selectCategory($event)" value={{this.postSelections[i]}} id={{post}}>{{post}}</button>
+      </ng-container>
+
+    </div>
+    <div *ngIf="postState === 3">
+      <div><h4>Title your post</h4>
+        <input type=text  formControlName="title">
+        <h4>Describe your post</h4>
+        <input type=text  formControlName="description">
+     </div>
+      
+      <ng-container>
+       
+        <mat-form-field>
+          <input matInput formControlName="deathDate" [matDatepicker]="picker" placeholder="Last pick-up date?">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </ng-container>
+    </div>
+  
+  <button type=submit >CreatePost</button>
+</form>
+</div>
+
+<div *ngIf="postState > 0">
+  <h5>Your current post:</h5>
+  <span *ngIf="this.rForm.value.department">
+  <strong>Department:</strong>  {{this.rForm.value.department}}</span>
+  
+  <span *ngIf="this.rForm.value.subDepartment">
+  <strong> SubDepartment:</strong>  {{this.rForm.value.subDepartment}}
+  </span> <br>
+  <span *ngIf="this.rForm.value.category">
+    <strong> Category:</strong>  {{this.rForm.value.category}}
+  </span> <br>
+  <span *ngIf="this.rForm.value.deathDate && this.rForm.value.description">{{this.rForm.value.description}} to be picked up no later than {{this.rForm.value.deathDate | date: 'fullDate'}}</span>
+</div>
+<button (click)="testPost()">test post</button>
