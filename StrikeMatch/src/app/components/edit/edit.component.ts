@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { PostService } from './../../services/post.service';
 import { Post } from './../../models/post';
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent}  from "@angular/material"
+import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatCard, MatInput}  from "@angular/material"
 import {tap} from 'rxjs/operators'
 import { Observable} from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -17,6 +17,14 @@ import { config } from '../../config'
   styleUrls: ['./edit.component.css']
 })
 export class EditComponent implements OnInit {
+  editState:boolean = false;
+  editedPost:any = {
+    title: "",
+    description:"",
+  };
+  
+  currentPost:Post;
+  selectedPostId: string;
   postData: Post[] =[];
   postsCollection: AngularFirestoreCollection<Post>
   currentUserPosts: Observable<any[]>
@@ -39,7 +47,26 @@ export class EditComponent implements OnInit {
      console.log(this.dataSource)
 
    })
-    
   }
+  editPostClicked(event){
+    console.log(event) 
+   this.currentPost = event;
+   this.editState = true;
+  (this.ps.getPost(event)).subscribe(post=>{
+    this.currentPost = post;
+    this.selectedPostId = event
+    console.log(this.selectedPostId)
+  })
+ }
+ deleteClicked(event){
+  console.log(event.target.value)
+  this.ps.deletePost(this.selectedPostId)
+  this.editState = false
+}
+updateClicked(){
 
+  this.ps.updatePost(this.selectedPostId, this.editedPost )
+ 
+  this.editState = false;
+}
 }

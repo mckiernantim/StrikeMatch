@@ -1,0 +1,21 @@
+<h2 mat-dialog-title [innerText]="currentPost.title" > </h2>
+<mat-dialog-content>
+  <h4>Last Pickup Date:  {{currentPost.deathDate.toDate() | date: 'dd/MM/yyyy'}}</h4>
+  <p >{{currentPost.description}}</p>
+  <p >here will be the username</p>
+  <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Subject" [formControl]="messageTitle">
+        <mat-error></mat-error>
+      </mat-form-field>
+      <mat-form-field>
+          <textarea matInput placeholder="Body" [formControl]="messageBody"></textarea>
+      </mat-form-field>
+    
+ 
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="claimPost(this.postId)">Claim</button>
+  <button mat-raised-button>Cancel</button>
+</mat-dialog-actions>
