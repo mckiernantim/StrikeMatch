@@ -10,7 +10,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms'
 import { PostService } from './services/post.service';
-import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule } from "@angular/material"
+import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatCard, MatFormFieldModule, MatSelect, MatSelectModule, MatDialogModule } from "@angular/material"
 import {MatButtonModule} from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { MatSidenavModule } from "@angular/material/sidenav"
@@ -53,6 +53,8 @@ import { LocalAuthService } from './services/local-auth.service';
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { EditComponent } from './components/edit/edit.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
+import { ClaimComponent } from './components/claim/claim.component';
 
 // login Config
 export function getAuthServiceConfigs() {
@@ -97,7 +99,9 @@ export function getAuthServiceConfigs() {
     VerifyEmailComponent,
     ForgotPasswordComponent,
     FeedComponent,
-    EditComponent
+    EditComponent,
+    ConversationComponent,
+    ClaimComponent
 
   ],
   imports: [
@@ -117,6 +121,7 @@ export function getAuthServiceConfigs() {
     MatMenuModule,
     MatTabsModule,
     MatSortModule,
+    MatDialogModule,
     MatTableModule,
     MatCheckboxModule,
     MatInputModule,
@@ -125,7 +130,11 @@ export function getAuthServiceConfigs() {
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
     FormsModule,
+
     
     
     ReactiveFormsModule,
@@ -134,6 +143,10 @@ export function getAuthServiceConfigs() {
    
     
  
+
+  ],
+  entryComponents:[
+    ClaimComponent
 
   ],
   providers: [

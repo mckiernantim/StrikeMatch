@@ -84,6 +84,7 @@ export class PostsComponent implements OnInit {
     this.currentPost.deathDate = this.rForm.value.deathDate;
     this.currentPost.claimedBy = null;
     this.currentPost.uid = this.rForm.value.uid.uid
+    this.currentPost.title= this.rForm.value.title;
     console.log(this.currentPost.uid)
     this.currentPost.description = this.rForm.value.description;
     console.log(this.currentPost)
@@ -94,8 +95,6 @@ export class PostsComponent implements OnInit {
 
   }
   selectDepartment(event) {
-
-
     this.rForm.patchValue({
       department: event.target['value']
 
