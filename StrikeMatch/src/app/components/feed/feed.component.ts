@@ -1,9 +1,10 @@
 import { ClaimComponent } from './../claim/claim.component';
 import { PostService } from './../../services/post.service';
 import { Post } from './../../models/post';
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
 import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatDialog, MatDialogActions}  from "@angular/material"
 import {tap} from 'rxjs/operators'
+
 
 
 @Component({
@@ -14,33 +15,43 @@ import {tap} from 'rxjs/operators'
 export class FeedComponent implements OnInit {
   postData: Post[] =[];
 
-  dataSource : MatTableDataSource<any>;
+  dataSource : MatTableDataSource<any> = new MatTableDataSource;
   currentUser = JSON.parse(localStorage.getItem('user'))
   @ViewChild(MatSort) sort:MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns:string[] = ['Title', "Description", "Pick Up Date" , "Location", "Contact" ]
-  
-  constructor(private ps: PostService, public dialog:MatDialog) { 
+  posts = this.ps.getPosts();
+  constructor(private ps: PostService, public dialog:MatDialog, public change:ChangeDetectorRef) { 
     
   }
-
-  ngOnInit() {
-    this.ps.getPosts().subscribe(posts=>{
+  refreshPosts(){
+  
+    this.posts.subscribe(posts=>{
      
       this.postData = posts.filter(post => post.claimedBy != `${this.currentUser.uid}`);
-      console.log(this.postData);
+      console.log("on Init firing")
+      console.log(this.postData)
      
       this.dataSource= new MatTableDataSource(this.postData)
+      console.log(this.dataSource)
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort
+     
+   
 
       
     });
+
+  }
+  ngOnInit() {
+   this.refreshPosts()
     
   }
-  ngAfterViewInit(): void {
-    
-     
+  ngDoCheck(){
+ this.refreshPosts()
+ console.log("fired")
+ console.log(this.dataSource.data)
+  
   
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.

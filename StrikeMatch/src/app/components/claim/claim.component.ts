@@ -1,4 +1,6 @@
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+
+
+import { FormControl, Validators, FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { Post } from './../../models/post';
 import { MatDialog } from '@angular/material';
@@ -6,6 +8,9 @@ import { PostService } from './../../services/post.service';
 import { inject } from '@angular/core/testing';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MessageService } from '../../services/message.service';
+
+
 
 
 
@@ -18,16 +23,29 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./claim.component.css']
 })
 export class ClaimComponent implements OnInit {
+  
   postId: any = (localStorage.getItem("currentPost"))
   currentPost: any;
-  body: string;
+  body: string
   title: string;
   author: string;
+  messageToSend:any = {
+    author: "",
+    title:"",
+    body:"",
+    createdAt:"",
+    recipient:""
+
+  };
 
   claimWindow: FormGroup
-  constructor(public ps: PostService, public dialogRef: MatDialogRef<ClaimComponent>,
+  constructor(
+    public ps: PostService, 
+    public dialogRef: MatDialogRef<ClaimComponent>,
+    public ms:MessageService, 
+    public fb: FormBuilder ,
     @Inject(MAT_DIALOG_DATA) public data: any, ) {
-    this.claimWindow = new FormGroup({
+    this.claimWindow = fb.group({
       messageTitle: new FormControl('', Validators.required),
       messageBody: new FormControl('', Validators.required),
     })
@@ -37,13 +55,10 @@ export class ClaimComponent implements OnInit {
     this.dialogRef.close()
   }
   ngOnInit() {
-
-    console.log("fired")
-    console.log(this.postId)
     this.ps.getPost(this.postId).subscribe(post => {
-      console.log(post)
+    
       this.currentPost = post
-      console.log(this.currentPost.title)
+     
     }
     )
 
@@ -58,9 +73,20 @@ getErrorMessage() {
       
           '';
 }
-  claimPost() {
-    this.ps.claimPost(this.postId);
+claimRequestClicked(){
+  let currentUser = JSON.parse(localStorage.getItem('user')).uid
+  
+  console.log(currentUser)
+  this.messageToSend.body = this.claimWindow.value.messageBody;
+  this.messageToSend.title = this.claimWindow.value.messageTitle;
+  this.messageToSend.author = currentUser
+  this.messageToSend.recipient = this.currentPost.uid
+  this.messageToSend.createdAt = Date.now()
+  console.log(this.messageToSend)
+  this.ms.createMessage(this.messageToSend)
+  this.dialogRef.close()
 
-  }
+}
+ 
 
 }

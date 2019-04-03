@@ -1,6 +1,6 @@
 <mat-tab-group (selectedTabChange)="this.tabChange($event)">
 
-  <mat-tab label="Search Posts">
+  <mat-tab label="Search Posts" click="searchTabClicked()">
     <ng-template matTabContent>
       <mat-icon></mat-icon>
       <app-feed></app-feed>
@@ -8,7 +8,7 @@
   </mat-tab>
 
 
-  <mat-tab label="Publish Post" (click)="this.ps.selectedIndex=2">
+  <mat-tab label="Publish Post">
     <ng-template matTabContent>
       <p>
         <mat-icon>publish</mat-icon>Create new posts</p>
