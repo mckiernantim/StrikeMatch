@@ -1,4 +1,23 @@
-<p>
-  conversation works!
-</p>
 
+<ng-container *ngIf= "messageReady" >
+  <div>
+    <button>
+      <img src="noun_back_button_952258.png" alt="back" routerLink="/messages">
+      
+    </button>
+  <h4>{{currentMessage.title}}</h4>
+  <div *ngIf="currentMessage.body.length > 0">
+    <p *ngFor="let message of currentMessage.body">{{message}}</p>
+    <div>
+   </div>
+  </div>
+</div>
+<form  class="conversation-form">
+    <mat-form-field class="conversation-full-width">
+      <input  [(ngModel)]="responseBody" [ngModelOptions]="{standalone: true}" matInput placeholder="Type a Response">
+    </mat-form-field>
+    <button mat-button (click)="sendReply(this.responseBody)">Submit</button>
+</form>
+
+
+</ng-container>

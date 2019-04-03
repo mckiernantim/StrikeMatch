@@ -31,7 +31,10 @@ export class PostService {
       
    }
    getPosts(){
-     return this.posts
+    
+     return  this.afs.collection('posts').snapshotChanges()
+     .pipe(map(actions => actions.map(this.documentToDomainObject)));
+   
    }
     getPost(id){
       let currentPost =
@@ -108,10 +111,11 @@ getUserId(){
   JSON.parse(localStorage.getItem('user'))
 }
  
- editTabClicked(){
+editTabClicked(){
+  this.getUserPosts()
+  }
 
-   this.getUserPosts()
-  
+searchTabClicked(){
+  this.getPosts()
 }
-
 }

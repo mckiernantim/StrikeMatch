@@ -1,3 +1,4 @@
+import { ConversationComponent } from './../components/conversation/conversation.component';
 import { SignupComponent } from './../components/sigunp/sigunp.component';
 import { VerifyEmailComponent } from './../components/verify-email/verify-email.component';
 import { ForgotPasswordComponent } from './../components/forgot-password/forgot-password.component';
@@ -5,6 +6,7 @@ import { GuardGuard } from './../guards/guard.guard';
 import { ProfileComponent } from './../components/profile/profile.component';
 import { MessageComponent } from './../components/message/message.component';
 import { LandingComponent } from './../components/landing/landing.component';
+
 
 
 
@@ -59,7 +61,12 @@ const routes: Routes = [
   {
     path:'signup',
     component:SignupComponent,
-    
+  },
+  {
+    path: 'conversation',
+    component: ConversationComponent,
+    canActivate: [GuardGuard]
+  
   },
 ];
 

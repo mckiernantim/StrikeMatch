@@ -65,9 +65,13 @@ export class PostsComponent implements OnInit {
       this.posts = posts
 
     });
-   
+  }
+  ngOnChanges(){
+    this.ps.getPosts().subscribe(posts => {
+      console.log(posts)
 
-
+      this.posts = posts
+    })
   }
   testPost() {
     console.log(this.rForm.value.uid.uid)
@@ -119,26 +123,17 @@ export class PostsComponent implements OnInit {
     this.postSelections = [];
     this.rForm.patchValue({
       subDepartment: event.target['value']
-
-
-
     })
-    console.log(event.target['value'])
     for (let i = 0; i < postOptions.length; i++) {
-
       if (lastSelection.children[i].subDepartment === event.target['id']) {
         this.subDepartmentIndex = i;
-
-        for (let j = 0; j < lastSelection.children[i].subcategories.length; j++) {
+      for (let j = 0; j < lastSelection.children[i].subcategories.length; j++) {
           this.postSelections.push(lastSelection.children[i].subcategories[j]['title'])
-
         }
       }
     }
     this.postState++
-
-
-  }
+ }
   selectCategory(event) {
     this.postSelections = [];
     let lastSelection = postOptions[this.departmentIndex].children[this.subDepartmentIndex]
