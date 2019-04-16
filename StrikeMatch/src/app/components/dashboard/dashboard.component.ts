@@ -36,9 +36,10 @@ export class DashboardComponent implements OnInit {
   else if (event.index===0){
    let x =this.ps.searchTabClicked()
    console.log(x)
-   
-    console.log("got all the posts")
-
+   console.log("got all the posts")
+  }
+  else if(event.index===1){
+    console.log("headed to posts")
   }
   
   }

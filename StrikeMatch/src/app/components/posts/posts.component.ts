@@ -3,10 +3,12 @@ import { AuthService } from './../../services/auth.service';
 import { postOptions } from './../../models/postOptions';
 import { Post } from './../../models/post';
 import { PostService } from './../../services/post.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm, ReactiveFormsModule, FormsModule, FormControl, Validators, FormBuilder, FormGroup } from "@angular/forms"
 import { MatDatepickerModule } from '@angular/material/datepicker'
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
+import { MatTabChangeEvent } from '@angular/material/';
+import { CurrencyIndex } from '@angular/common/src/i18n/locale_data';
 
 
 
@@ -19,6 +21,7 @@ import { DatePipe } from '@angular/common'
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit {
+
   posts: Post[]
   rForm: FormGroup;
 
@@ -39,12 +42,11 @@ export class PostsComponent implements OnInit {
     deathDate: null,
     location: null,
     description: null,
-
   };
 
 
 
-  constructor(private ps: PostService, private as: AuthService, fb: FormBuilder) {
+  constructor(private ps: PostService, private as: AuthService, public fb: FormBuilder, public change: ChangeDetectorRef ) {
     this.rForm = fb.group({
       title: (['']),
       department: (['']),
@@ -66,6 +68,19 @@ export class PostsComponent implements OnInit {
 
     });
   }
+  tabChange(event: MatTabChangeEvent){
+    this.change.markForCheck()
+  if (event.index===2){
+    this.ps.editTabClicked()
+  }  
+  else if (event.index===0){
+   let x =this.ps.searchTabClicked()
+   console.log(x)
+   
+    console.log("got all the posts")
+
+  }
+}
   ngOnChanges(){
     this.ps.getPosts().subscribe(posts => {
       console.log(posts)
@@ -93,17 +108,17 @@ export class PostsComponent implements OnInit {
     this.currentPost.description = this.rForm.value.description;
     console.log(this.currentPost)
     this.ps.createPost(this.currentPost)
+    
   }
   getPostInfoAndClaim(post) {
 
 
   }
   selectDepartment(event) {
+    console.log("firing")
     this.rForm.patchValue({
       department: event.target['value']
-
     })
-
     for (let i = 0; i < postOptions.length; i++) {
 
       if (postOptions[i].department === event.target['id']) {
@@ -111,7 +126,6 @@ export class PostsComponent implements OnInit {
         this.departmentIndex = i;
         for (let j = 0; j < postOptions[i].children.length; j++) {
           this.postSelections.push(postOptions[i].children[j].subDepartment)
-
         }
       }
     }
@@ -124,11 +138,11 @@ export class PostsComponent implements OnInit {
     this.rForm.patchValue({
       subDepartment: event.target['value']
     })
-    for (let i = 0; i < postOptions.length; i++) {
-      if (lastSelection.children[i].subDepartment === event.target['id']) {
+    for (let i = 0; i < lastSelection.children.length; i++) {
+      if (lastSelection.children[i]['subDepartment'] === event.target['id']) {
         this.subDepartmentIndex = i;
-      for (let j = 0; j < lastSelection.children[i].subcategories.length; j++) {
-          this.postSelections.push(lastSelection.children[i].subcategories[j]['title'])
+      for (let j = 0; j < lastSelection.children[i]['subcategories'].length; j++) {
+          this.postSelections.push(lastSelection.children[i]['subcategories'][j]['title'])
         }
       }
     }

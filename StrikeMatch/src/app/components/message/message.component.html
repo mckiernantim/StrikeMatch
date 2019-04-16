@@ -15,8 +15,16 @@
       <th mat-header-cell *matHeaderCellDef> Title </th>
       <td mat-cell *matCellDef="let message; let i=index;">
         <div>
-          <button routerLink="/conversation" value ="{{message.id}}" (click)="messageClicked($event.target.value)">
+          <button mat-button color="primary" routerLink="/conversation" value ="{{message.id}}" (click)="messageClicked($event.target.value)">
              {{message.title}}</button>
+      </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="Delete">
+      <th mat-header-cell *matHeaderCellDef> Delete </th>
+      <td mat-cell *matCellDef="let message; let i=index;">
+        <div>
+          <app-modal></app-modal>
       </div>
       </td>
     </ng-container>

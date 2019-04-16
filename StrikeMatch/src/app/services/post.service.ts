@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/firestore"
 import { Post } from '../models/post'
+import { MatTabChangeEvent } from '@angular/material/'
 import { Observable} from 'rxjs'
 import { map } from 'rxjs/operators'
 import { config } from '../config'
+
 
 
 
@@ -22,7 +24,7 @@ export class PostService {
   currentUser = JSON.parse(localStorage.getItem('user'))
   currentUserPosts: Observable<any[]>
 
-  constructor(private afs: AngularFirestore, private router:Router) {
+  constructor(private afs: AngularFirestore, private router:Router, ) {
     this.postsCollection = afs.collection<Post>(config.collection_endpoint);
   
     this.posts = 

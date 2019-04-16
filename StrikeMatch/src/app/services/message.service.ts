@@ -10,9 +10,12 @@ import { Observable, Timestamp } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { config } from '../config'
 import { take } from 'rxjs/operators'
+
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class MessageService {
 
   userInbox: Observable<Message[]>;
@@ -34,6 +37,8 @@ export class MessageService {
       this.afs.collection('messages').snapshotChanges()
         .pipe(map(actions => actions.map(this.documentToDomainObject)))
       }
+
+      
 
   getUser(id) {
     let recipient =
@@ -72,7 +77,7 @@ export class MessageService {
   }
   createMessage(message) {
     this.messageCollection.add(message).then(() =>
-      this.router.navigate(['message']));
+      this.router.navigate(['messages']));
     console.log("message sent")
 
   }
@@ -91,6 +96,10 @@ export class MessageService {
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
     currentMessage.update({body:update})
 
+   }
+   deleteMessage(){
+    let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
+    currentMessage.update({visible:this.currentUserId})
    }
 }
 

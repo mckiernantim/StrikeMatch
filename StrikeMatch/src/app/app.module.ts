@@ -22,6 +22,7 @@ import {MatSortModule} from "@angular/material/sort"
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTabChangeEvent} from "@angular/material/"
 
+
 // login
 import {
   SocialLoginModule,
@@ -55,6 +56,7 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { EditComponent } from './components/edit/edit.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { ClaimComponent } from './components/claim/claim.component';
+import { ModalComponent, ModalContent } from './components/modal/modal.component';
 
 // login Config
 export function getAuthServiceConfigs() {
@@ -101,7 +103,9 @@ export function getAuthServiceConfigs() {
     FeedComponent,
     EditComponent,
     ConversationComponent,
-    ClaimComponent
+    ClaimComponent,
+    ModalComponent,
+    ModalContent,
 
   ],
   imports: [
@@ -127,6 +131,7 @@ export function getAuthServiceConfigs() {
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -134,6 +139,7 @@ export function getAuthServiceConfigs() {
     MatFormFieldModule,
     MatSelectModule,
     FormsModule,
+    
 
     
     
@@ -146,7 +152,8 @@ export function getAuthServiceConfigs() {
 
   ],
   entryComponents:[
-    ClaimComponent
+    ClaimComponent,
+    ModalContent
 
   ],
   providers: [

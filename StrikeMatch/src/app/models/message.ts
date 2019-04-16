@@ -6,6 +6,7 @@ export interface Message {
     body: string[];
     createdAt: Date;
     newContent: boolean;
+    visible:string[];
 
 
 }

@@ -47,16 +47,7 @@ export class FeedComponent implements OnInit {
    this.refreshPosts()
     
   }
-  ngDoCheck(){
- this.refreshPosts()
- console.log("fired")
- console.log(this.dataSource.data)
-  
-  
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    
-  }
+
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
 

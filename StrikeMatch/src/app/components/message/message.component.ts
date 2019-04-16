@@ -1,11 +1,10 @@
+import { ModalComponent } from './../modal/modal.component';
 import { Router } from '@angular/router';
 import { async } from '@angular/core/testing';
 import { Message } from './../../models/message';
 import { MessageService } from './../../services/message.service';
 import { Component, OnInit } from '@angular/core';
 import { map } from "rxjs/operators"
-
-
 
 import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent}  from "@angular/material"
 
@@ -21,7 +20,7 @@ import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEve
 export class MessageComponent implements OnInit {
   userReceived: MatTableDataSource<any>;
   userSent: Message[] = [];
-  displayedColumns:string[] = ['From',"Subject"]
+  displayedColumns:string[] = ['From',"Subject", "Delete"]
   dartaSource = this.userReceived
   currentUser = JSON.parse(localStorage.getItem('user'))
   currentUserId= this.currentUser['uid']
@@ -32,7 +31,7 @@ export class MessageComponent implements OnInit {
  
 
 
-  constructor(public ms:MessageService) { }
+  constructor(public ms:MessageService, ) { }
 
   ngOnInit() {
     this.updateMessages()
@@ -61,7 +60,12 @@ export class MessageComponent implements OnInit {
     localStorage.removeItem("currentMessage")
     console.log(event)
    localStorage.setItem("currentMessage", event)
-    
-    
+  }
+  deleteClicked(event){
+   this.messageClicked(event)
+   this.ms.deleteMessage()
+ 
+
+
   }
 }
