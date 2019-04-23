@@ -3,7 +3,7 @@ import { AuthService } from './../../services/auth.service';
 import { postOptions } from './../../models/postOptions';
 import { Post } from './../../models/post';
 import { PostService } from './../../services/post.service';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm, ReactiveFormsModule, FormsModule, FormControl, Validators, FormBuilder, FormGroup } from "@angular/forms"
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { DatePipe } from '@angular/common';
@@ -21,7 +21,9 @@ import { CurrencyIndex } from '@angular/common/src/i18n/locale_data';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit {
-
+  @Input() tabReset:boolean;
+  @Output()tabResetChange = new EventEmitter<number>()
+  selectedIndex: number = 0
   posts: Post[]
   rForm: FormGroup;
 
@@ -48,10 +50,10 @@ export class PostsComponent implements OnInit {
 
   constructor(private ps: PostService, private as: AuthService, public fb: FormBuilder, public change: ChangeDetectorRef ) {
     this.rForm = fb.group({
-      title: (['']),
-      department: (['']),
-      subDepartment: ([""]),
-      category: ([""]),
+      title: '',
+      department: '',
+      subDepartment: "",
+      category: "",
       uid:JSON.parse(localStorage.getItem('user')),
       deathDate: null,
       description: null
@@ -109,12 +111,14 @@ export class PostsComponent implements OnInit {
     console.log(this.currentPost)
     this.ps.createPost(this.currentPost)
     
+    
+    
   }
   getPostInfoAndClaim(post) {
 
 
   }
-  selectDepartment(event) {
+  selectDepartment(event:any) {
     console.log("firing")
     this.rForm.patchValue({
       department: event.target['value']
@@ -125,11 +129,13 @@ export class PostsComponent implements OnInit {
         console.log(event.target['id'] + " <------department name")
         this.departmentIndex = i;
         for (let j = 0; j < postOptions[i].children.length; j++) {
-          this.postSelections.push(postOptions[i].children[j].subDepartment)
+          this.postSelections.push(postOptions[i].children[j]['subDepartment'])
+          console.log(this.postSelections)
+          console.log("added to post selections")
         }
       }
     }
-    console.log(this.postState, this.postSelections)
+    console.log(this.postSelections)
     this.postState++
   }
   selectSubDepartment(event) {
@@ -142,8 +148,12 @@ export class PostsComponent implements OnInit {
       if (lastSelection.children[i]['subDepartment'] === event.target['id']) {
         this.subDepartmentIndex = i;
       for (let j = 0; j < lastSelection.children[i]['subcategories'].length; j++) {
+        if (lastSelection.children[i]['subcategories'][j]['title'] === null){
+          this.postState++
+        }else{
           this.postSelections.push(lastSelection.children[i]['subcategories'][j]['title'])
         }
+      }
       }
     }
     this.postState++
@@ -155,14 +165,18 @@ export class PostsComponent implements OnInit {
     this.rForm.patchValue({
       category: event.target['value']
     })
-    for (let i = 0; i < lastSelection.subcategories.length; i++) {
-      if (lastSelection.subcategories[i]['title'] === this.rForm['category']) {
-        for (let j = 0; j < lastSelection.subcategories[i]['options'].length; j++) {
-          this.postSelections.push(lastSelection.subcategories[i]['options'][j]['itemTitle'])
+    for (let i = 0; i < lastSelection['subcategories'].length; i++) {
+      if (lastSelection['subcategories'][i]['title'] === this.rForm['category']) {
+        for (let j = 0; j < lastSelection['subcategories'][i]['options'].length; j++) {
+          this.postSelections.push(lastSelection['subcategories'][i]['options'][j]['itemTitle'])
         }
       }
     }
     this.postState++
+  }
+  resetTabIndex() {
+    this.selectedIndex = 0;
+    console.log('tab index has been reset');
   }
 
 

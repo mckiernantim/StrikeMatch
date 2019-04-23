@@ -1,3 +1,4 @@
+
 import { Router } from '@angular/router';
 import { NgForm, ReactiveFormsModule, FormsModule, FormControl, Validators, FormBuilder, FormGroup } from "@angular/forms"
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -5,9 +6,14 @@ import { AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/f
 import { Observable } from 'rxjs';
 import { MessageService } from './../../services/message.service';
 import { Message } from './../../models/message';
-import { Component, OnInit } from '@angular/core';
+import { OnInit } from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 
+export interface DialogData {
+ 
+}
 
 
 @Component({
@@ -17,6 +23,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConversationComponent implements OnInit {
   rForm:FormGroup;
+  name:any;
+  content:any;
   user:any = JSON.parse(localStorage.getItem('user'))
   conversations:any[] = [];
   currentMessageId: string = localStorage.getItem("currentMessage")
@@ -24,11 +32,12 @@ export class ConversationComponent implements OnInit {
   collecitons : AngularFirestoreCollection 
   responseBody: string;
   messageReady: boolean = false
-  constructor( public router:Router,public ms:MessageService,public icon:MatIconRegistry, fb:FormBuilder) {
+  constructor( public router:Router,public ms:MessageService,public icon:MatIconRegistry, fb:FormBuilder, public dialog: MatDialog) {
     icon.addSvgIcon('back','../icons/noun_back button_952258.png')
    
-  }
+}
 
+  
   ngOnInit() {
      this.refreshMessage()
   }
@@ -52,9 +61,7 @@ export class ConversationComponent implements OnInit {
       console.log("convo is an array")
 
     let convo =  this.currentMessage["body"]
-    
-
-   convo.push(" " + `${this.user['uid']}: ` + this.responseBody)
+    convo.push(" " + `${this.user['uid']}: ` + this.responseBody)
     console.log()
     console.log(this.responseBody)
     console.log(convo)
@@ -68,11 +75,15 @@ export class ConversationComponent implements OnInit {
       this.ms.updateMessage(convo);
       this.router.navigate(["messages"])
     }
-    
+  }
+  confirmButtonClicked(){
+    this.router.navigate(["confirm"])
   }
  
  
 }
+
+
 
   
   

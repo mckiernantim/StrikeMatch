@@ -1,14 +1,11 @@
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 15px;
+.feed{
+  align-content:center
 }
-.example-container {
-  display: flex;
-  flex-direction: column;
-  padding: 25px;
+.mat-column-Actions {
+  flex: 0 0 100px !important;
+  white-space: unset !important;
 }
+.message-table{
 
-.example-container > * {
-  width: 100%;
+align-content: center;
 }

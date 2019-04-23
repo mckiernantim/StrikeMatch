@@ -7,6 +7,7 @@ import { MatTabChangeEvent } from '@angular/material/';
 import { ProfileComponent } from './../profile/profile.component';
 import { MessageComponent } from './../message/message.component';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { PostsComponent } from '../posts/posts.component';
 
 
 
@@ -22,11 +23,20 @@ export class DashboardComponent implements OnInit {
   currentUser = JSON.parse(localStorage.getItem('user'))
   postData:MatTableDataSource<any>;
   posts:any;
+  childValue: any
   
   constructor(public ps: PostService, public change:ChangeDetectorRef) { }
-
+  
   ngOnInit() {
   } 
+  getOutput(selected: number){
+    console.log("get ouput firing from dashbaord component")
+    if (selected)
+    {
+      console.log(this.childValue + "came from child component")
+      
+    }
+  }
  
   tabChange(event: MatTabChangeEvent){
     this.change.markForCheck()

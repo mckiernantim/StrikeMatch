@@ -17,6 +17,7 @@
       <input  [(ngModel)]="responseBody" [ngModelOptions]="{standalone: true}" matInput placeholder="Type a Response">
     </mat-form-field>
     <button mat-button (click)="sendReply(this.responseBody)">Submit</button>
+    <button mat-button color ="primary"(click)="confirmButtonClicked()">Confirm Pickup</button>
 </form>
 
 

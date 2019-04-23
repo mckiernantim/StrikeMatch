@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { PostService } from './../../services/post.service';
 import { Post } from './../../models/post';
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatCard, MatInput}  from "@angular/material"
+import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatCard, MatInput, MatTable}  from "@angular/material"
 import {tap} from 'rxjs/operators'
 import { Observable} from 'rxjs'
 import { map } from 'rxjs/operators'

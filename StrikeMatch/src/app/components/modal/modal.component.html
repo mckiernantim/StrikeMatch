@@ -1,13 +1,7 @@
-<ol>
+<ul>
   <li>
-    <mat-form-field>
-      <input matInput [(ngModel)]="name" placeholder="What's your name?">
-    </mat-form-field>
+    <button mat-raised-button (click)="openDialog()">Reply</button>
+    <button mat-raised-button (click)="openDialog()">Delete</button>
   </li>
-  <li>
-    <button mat-raised-button (click)="openDialog()">Pick one</button>
-  </li>
-  <li *ngIf="animal">
-    You chose: <i>{{animal}}</i>
-  </li>
-</ol>
+ 
+</ul>
