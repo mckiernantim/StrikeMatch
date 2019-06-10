@@ -1,0 +1,11 @@
+.post-body{
+    text-align: left;
+    padding:1%;
+
+}
+.post-body .mat-card-content p{
+    font-size:17px;
+}
+.mat-form-field{
+    width:100%
+}

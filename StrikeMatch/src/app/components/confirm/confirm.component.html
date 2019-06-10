@@ -1,16 +1,31 @@
-<p>
-  You are about to confirm a pickup for your item.  By clicking confirm you agree to have this post removed from the StrikeMathc feed anda gree in good faith to be at the slected locaiton at the selected pickup time to exchange said items.  Thanks for using strike match!
-</p>
-<h4>Post:</h4>
-<form class="example-form">
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="ente
-      
-      
-       r a pickup adress" value="">
-    </mat-form-field>
-  
-    <mat-form-field class="example-full-width">
-      <textarea matDatePicker placeholder=""></textarea>
-    </mat-form-field>
-  </form>
+<ng-container *ngIf="postReady">
+  <mat-card>
+    <mat-card-title>Confrim Pickup</mat-card-title>
+    <div>
+      <mat-card-content>
+        You are about to confirm a pickup for your item. By clicking confirm you agree to have this post removed from the StrikeMatch
+        feed and agree in good faith to be at the slected locaiton at the selected pickup time to exchange said items. Thanks
+        for using strike match!
+      </mat-card-content>
+      <mat-card style="text-align:left">
+        <mat-card-title>{{currentPost.displayName}}'s Post: </mat-card-title>
+        <mat-card-title>{{currentPost.title}}</mat-card-title>
+        <mat-card-title>Requested by {{currentPost.requestedBy}}</mat-card-title>
+        <mat-card-subtitle>
+          Department: {{currentPost.department}} SubDepartment: {{currentPost.subDepartment}} 
+        </mat-card-subtitle>
+        <mat-card-content>
+            {{currentPost.description}}
+        </mat-card-content>
+
+
+
+        <div>
+          <p>{{currentPost.description}}</p>
+        </div>
+
+        <button mat-raised-button (click)="confirmClicked()">confirm</button>
+      </mat-card>
+    </div>
+  </mat-card>
+</ng-container>

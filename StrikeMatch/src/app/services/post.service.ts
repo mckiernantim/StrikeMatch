@@ -21,6 +21,9 @@ export class PostService {
   postsCollection: AngularFirestoreCollection<Post>
   private postDoc: AngularFirestoreDocument<Post>
   posts: Observable<any[]>
+  userOpenPosts: Post[] = [];
+  userRequestedPosts: Post[] = [];
+  userClaimedPosts:Post[]=[]
   currentUser = JSON.parse(localStorage.getItem('user'))
   currentUserPosts: Observable<any[]>
 
@@ -72,8 +75,7 @@ export class PostService {
       console.log(post)
       
       this.postDoc = this.afs.doc<Post>
-     
-      (`${config.collection_endpoint}/${id}`);
+       (`${config.collection_endpoint}/${id}`);
       
       if(post.description){
         this.postDoc.update({description: post.description})
@@ -82,15 +84,22 @@ export class PostService {
         this.postDoc.update({title: post.title})
       }
       if(post.deathDate){
+        console.log(post.deathDate)
         this.postDoc.update({deathDate: post.deathDate})
-      ;
-
-    }
-  }
+      }
+      if(post.claimRequested){
+        this.postDoc.update({claimRequested: post.claimRequested})
+      }
+      if(post.claimRequestedBy){
+        console.log("requested by updated" + this.currentUser["displayName"])
+        
+        this.postDoc.update({requestedBy: post.claimRequestedBy['displayName']})
+      }
+}
    createPost(post){
      
     this.postsCollection.add(post).then(()=>
-     this.router.navigate(['profile']));
+    this.router.navigate(['/dashboard']))
 
    }
    claimPost(id){
@@ -100,9 +109,15 @@ export class PostService {
   
     this.postDoc = this.afs.doc<Post>
     (`${config.collection_endpoint}/${id}`);
-    this.postDoc.update({claimedBy:`${currentUser.uid}`})
+    this.postDoc.update({claimedBy:`${currentUser.uid}`, claimedByDisplayName:`${currentUser.displayName}`})
    
     console.log(this.postDoc)
+   }
+   confirmClaim(postId, userId,){
+     this.postDoc = this.afs.doc<Post>
+     (`${config.collection_endpoint}/${postId}`);
+     this.postDoc.update({claimedBy:`${userId}`})
+     console.log(this.postDoc)
    }
    documentToDomainObject = _ => {
     const object = _.payload.doc.data();

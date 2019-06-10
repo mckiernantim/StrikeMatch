@@ -1,11 +1,16 @@
-.feed{
-  align-content:center
+.data-table{
+  min-width: 150px;
+  width: 100%;
+ 
 }
-.mat-column-Actions {
-  flex: 0 0 100px !important;
-  white-space: unset !important;
-}
-.message-table{
 
-align-content: center;
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.mat-card{
+    display:block
+}
+.center{
+    text-align: center;
 }

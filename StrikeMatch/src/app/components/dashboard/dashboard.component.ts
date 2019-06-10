@@ -1,4 +1,6 @@
+import { MatCardModule } from '@angular/material';
 import { MatTableDataSource } from '@angular/material';
+
 
 import { FeedComponent } from './../feed/feed.component';
 import { Post } from './../../models/post';

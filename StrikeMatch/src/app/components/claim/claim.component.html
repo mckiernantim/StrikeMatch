@@ -1,34 +1,42 @@
-<div *ngIf="postsReady">
-<h2 mat-dialog-title [innerText]="currentPost.title"> </h2>
-<mat-dialog-content>
-    
-  
-  <h4>{{currentPost.uid}} shared a post in
-    <span style="text-transform:uppercase">{{currentPost.department}}</span>:</h4>
-  <p>{{currentPost.uid}}'s Post:</p> 
-  <p>Post number: {{postId}}</p> 
- 
-  <p><strong>{{currentPost.description}}</strong></p>
-  <p>Pick this up before <span>{{currentPost.deathDate.toDate() | date: 'dd/MM/yyyy'}}</span></p>
-  <form class="example-form" [formGroup]="claimWindow">
-      <h4>Intersted?  Contact {{currentPost.uid}} to set up a pick-up date</h4>
-      
-    <mat-form-field class="example-full-width">
-     <input matInput placeholder="Subject" formControlName="messageTitle">
-      <mat-error></mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <textarea cdkTextareaAutosize
-      #autosize="cdkTextareaAutosize"
-      cdkAutosizeMinRows="2"
-      cdkAutosizeMaxRows="5"
-      matInput placeholder="Body" 
-      formControlName="messageBody"></textarea>
-    </mat-form-field>
-  </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button value="{{currentPost.uid}}" (click)="claimRequestClicked($event.target.value)">Claim</button>
-  <button mat-raised-button>Cancel</button>
-</mat-dialog-actions>
-</div>
+<mat-card>
+  <div *ngIf="postsReady">
+    <mat-card-title>
+      <h2 mat-dialog-title > Claim Post</h2>
+    </mat-card-title>
+    <mat-dialog-content>
+      <h4>{{currentPost.displayName}} shared a post in
+        <span style="text-transform:uppercase">{{currentPost.department}}</span>:</h4>
+      <mat-card>
+        <div class="post-body">
+          <mat-card-content>
+            <p>
+              <strong>{{currentPost.description}}</strong>
+            </p>
+
+            <p>Pick this up before
+              <span>{{currentPost.deathDate.toDate() | date: 'dd/MM/yyyy'}}</span>
+            </p>
+          </mat-card-content>
+        </div>
+
+      </mat-card>
+      <form class="example-form" [formGroup]="claimWindow">
+        <h4>Intersted? Contact {{currentPost.displayName}} to set up a pick-up date</h4>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Subject" formControlName="messageTitle">
+          <mat-error></mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <textarea cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5" matInput placeholder="Body"
+            formControlName="messageBody" style="width:95%"></textarea>
+        </mat-form-field>
+      </form>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button mat-button value="{{currentPost.uid}}" (click)="claimRequestClicked($event.target.value)">Claim</button>
+      <button mat-raised-button>Cancel</button>
+    </mat-dialog-actions>
+  </div>
+</mat-card>
+

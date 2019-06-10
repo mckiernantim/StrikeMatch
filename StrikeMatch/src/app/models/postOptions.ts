@@ -581,15 +581,15 @@ export const postOptions = [
     ]
   },
   {
-    department:"Costumes",
+    department:"costumes",
     children:[{
       subDepartment:"Period",
-      suncategories:[{
-        title:"",
+      subcategories:[{
+        title:null,
         options:[{
-          itemTitle:"",
+          itemTitle:null,
           subOptions:[{
-            optionTitle:"",
+            optionTitle:null,
             optionSpecifics:[""]
           }]
         }]
@@ -597,12 +597,12 @@ export const postOptions = [
     },
     {
       subDepartment:"Uniform",
-      suncategories:[{
-        title:"",
+      subcategories:[{
+        title:null,
         options:[{
-          itemTitle:"",
+          itemTitle:null,
           subOptions:[{
-            optionTitle:"",
+            optionTitle:null,
             optionSpecifics:[""]
           }]
         }]
@@ -610,12 +610,12 @@ export const postOptions = [
     },
     {
       subDepartment:"Specialty",
-      suncategories:[{
-        title:"",
+      subcategories:[{
+        title:null,
         options:[{
-          itemTitle:"",
+          itemTitle:null,
           subOptions:[{
-            optionTitle:"",
+            optionTitle:null,
             optionSpecifics:[""]
           }]
         }]
@@ -623,12 +623,12 @@ export const postOptions = [
     },
     {
       subDepartment:"Equipment",
-      suncategories:[{
-        title:"",
+      subcategories:[{
+        title:null,
         options:[{
-          itemTitle:"",
+          itemTitle:null,
           subOptions:[{
-            optionTitle:"",
+            optionTitle:null,
             optionSpecifics:[""]
           }]
         }]

@@ -34,8 +34,9 @@ export class ClaimComponent implements OnInit {
   author: string;
   messageToSend:any = {
     author: "",
+    uid:"",
     title:"",
-    body:"",
+    body:[""],
     createdAt:"",
     recipient:"",
     postId:""
@@ -81,19 +82,20 @@ getErrorMessage() {
 }
 claimRequestClicked(userToSendMessageTo){
   
-  let currentUser = JSON.parse(localStorage.getItem('user')).uid
+  let currentUser = JSON.parse(localStorage.getItem('user'))
   
-  console.log(currentUser+ "THIS IS WHAT SHOYULLD BE UPDATING")
-  this.messageToSend.body = this.claimWindow.value.messageBody;
+ 
+  this.messageToSend.body.push(this.claimWindow.value.messageBody);
   this.messageToSend.title = this.claimWindow.value.messageTitle;
-  this.messageToSend.author = currentUser
+  this.messageToSend.uid = currentUser.uid
   this.messageToSend.postId = this.postId
-  
+  this.messageToSend.author= currentUser.displayName
+  console.log(userToSendMessageTo)
   this.messageToSend.recipient = userToSendMessageTo
   this.messageToSend.createdAt = Date.now()
   
   this.ms.createMessage(this.messageToSend)
-  let updatedPostStatus= {
+  let updatedPostStatus = {
     claimRequested: true
   }
   let userRequestedId = {

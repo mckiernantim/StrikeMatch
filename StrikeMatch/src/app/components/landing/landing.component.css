@@ -1,0 +1,14 @@
+.mat-card {
+    max-width: 75%;
+    margin:auto; 
+    text-align: center;
+  
+  }
+  .mat-card-actions{
+    display:flex
+  }
+  
+  .mat-card-actions .flex-spacer{
+    width:100%
+  }
+  

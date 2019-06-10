@@ -41,6 +41,7 @@ export class PostsComponent implements OnInit {
     subDepartment: "",
     category: "",
     uid: "",
+    displayName:"",
     deathDate: null,
     location: null,
     description: null,
@@ -55,6 +56,7 @@ export class PostsComponent implements OnInit {
       subDepartment: "",
       category: "",
       uid:JSON.parse(localStorage.getItem('user')),
+      displayName:JSON.parse(localStorage.getItem('user')),
       deathDate: null,
       description: null
 
@@ -64,7 +66,7 @@ export class PostsComponent implements OnInit {
   ngOnInit() {
     
     this.ps.getPosts().subscribe(posts => {
-      console.log(posts)
+
 
       this.posts = posts
 
@@ -85,8 +87,6 @@ export class PostsComponent implements OnInit {
 }
   ngOnChanges(){
     this.ps.getPosts().subscribe(posts => {
-      console.log(posts)
-
       this.posts = posts
     })
   }
@@ -97,27 +97,46 @@ export class PostsComponent implements OnInit {
   
 
   modifyAndPost() {
-    console.log(this.rForm.value.department)
+    
     this.currentPost['department'] = this.rForm.value['department'];
-    console.log(this.currentPost.department)
+ 
     this.currentPost.subDepartment = this.rForm.value.subDepartment;
     this.currentPost.category = this.rForm.value.category;
     this.currentPost.deathDate = this.rForm.value.deathDate;
     this.currentPost.claimedBy = null;
     this.currentPost.uid = this.rForm.value.uid.uid
+    this.currentPost.displayName = this.rForm.value.displayName.displayName
+    
     this.currentPost.title= this.rForm.value.title;
     console.log(this.currentPost.uid)
     this.currentPost.description = this.rForm.value.description;
-    console.log(this.currentPost)
+    
+
     this.ps.createPost(this.currentPost)
-    
-    
-    
-  }
-  getPostInfoAndClaim(post) {
 
+    this.resetPostForms();
 
   }
+  resetPostForms(){
+    this.postSelections = [];
+    this.currentPost.department = null;
+    this.currentPost.category = null;
+    this.currentPost.deathDate = null;
+    this.currentPost.uid=null;
+    this.currentPost.displayName=null;
+    this.currentPost.title=null;
+    this.currentPost.description=null;
+    
+    this.rForm.value.department = null;
+    this.rForm.value.category = null;
+    this.rForm.value.deathDate = null;
+    this.rForm.value.title=null;
+    this.rForm.value.description=null;
+     
+    this.postState=0;
+}
+
+
   selectDepartment(event:any) {
     console.log("firing")
     this.rForm.patchValue({

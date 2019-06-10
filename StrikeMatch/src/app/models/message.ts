@@ -7,6 +7,7 @@ export interface Message {
     createdAt: Date;
     newContent: boolean;
     visible:string[];
+    postId:string;
 
 
 }

@@ -50,6 +50,7 @@ export class MessageComponent implements OnInit {
       console.log(this.sort)
       this.userSent = new MatTableDataSource(messages)
       this.userSent.sort = this.sort
+      console.log(this.userSent.data)
      
     })
     this.ms.getUserInbox().subscribe(messages => {
