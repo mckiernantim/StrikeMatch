@@ -1,0 +1,39 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .mat-card{
+    display: block
+  }
+.edit-card{
+  text-align: center;
+}
+.edit-card .mat-card-header{
+  display: block;
+ 
+}
+ .mat-card-title{
+  font-size: 35px;
+}
+
+.inner-card .mat-card-title{
+  font-size:28px;
+
+}
+.inner-card .mat-card-content{
+  font-style: italic;
+}
+.bold{
+  font-weight: bold;
+}
+
+.edit-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}

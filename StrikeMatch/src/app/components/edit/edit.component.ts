@@ -1,13 +1,15 @@
+import { NgForm, ReactiveFormsModule, FormsModule, FormControl, Validators, FormBuilder, FormGroup } from "@angular/forms"
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { PostService } from './../../services/post.service';
 import { Post } from './../../models/post';
 import { Component, OnInit, ViewChild} from '@angular/core';
-import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatCard, MatInput}  from "@angular/material"
+import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatCard, MatInput, MatTable, MatFormField}  from "@angular/material"
 import {tap} from 'rxjs/operators'
 import { Observable} from 'rxjs'
 import { map } from 'rxjs/operators'
 import { config } from '../../config'
+
 
 
 
@@ -18,10 +20,10 @@ import { config } from '../../config'
 })
 export class EditComponent implements OnInit {
   editState:boolean = false;
-  editedPost:any = {
-    title: "",
-    description:"",
-  };
+  deleteState:boolean = false;
+  formControl: FormControl
+  rForm:FormGroup
+  editedPost:any;
   
   currentPost:Post;
   selectedPostId: string;
@@ -34,8 +36,15 @@ export class EditComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns:string[] = ['Title', "Description", "Pick Up Date" , "Location", "Contact" ]
 
-  constructor( private ps: PostService, private afs: AngularFirestore) { 
+  constructor( private ps: PostService, private afs: AngularFirestore, public fb:FormBuilder) { 
     this.postsCollection = afs.collection<Post>(config.collection_endpoint);
+    this.rForm = fb.group({
+      
+      'title':[null, ] ,
+      'description':[null,] ,
+      'deathDate':[null,] 
+      
+  })
   }
 
   ngOnInit() {
@@ -49,23 +58,48 @@ export class EditComponent implements OnInit {
    })
   }
   editPostClicked(event){
+    if(this.deleteState){
+      this.deleteState = false
+    }
     console.log(event) 
    this.currentPost = event;
    this.editState = true;
   (this.ps.getPost(event)).subscribe(post=>{
     this.currentPost = post;
+    
     this.selectedPostId = event
-    console.log(this.selectedPostId)
+    console.log(this.currentPost)
   })
  }
- deleteClicked(event){
+ deletePostClicked(event){
+   if(this.editState){
+     this.editState = false
+   }
+
+   this.selectedPostId = event
+
+  this.currentPost = event;
+  this.deleteState = true;
+ (this.ps.getPost(event)).subscribe(post=>{
+   this.currentPost = post;
+   
+
+   console.log(this.currentPost)
+ })
+}
+closeEditOrDelete(){
+  this.editState = false;
+  this.deleteState = false;
+}
+ deleteConfirm(event){
   console.log(event.target.value)
   this.ps.deletePost(this.selectedPostId)
-  this.editState = false
+  this.deleteState = false
 }
-updateClicked(){
-
-  this.ps.updatePost(this.selectedPostId, this.editedPost )
+updateClicked(value){
+  console.log(value)
+  this.ps.updatePost(this.selectedPostId, value )
+  
  
   this.editState = false;
 }

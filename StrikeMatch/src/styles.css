@@ -1,17 +1,70 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+.data-table{
+  min-width: 150px;
+max-width: 500px;
+width: 100%;
 
-body{
+}
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+.mat-card{
+    display:block
+}
+.center{
+    text-align: center;
+}
+/* body{
 
-    font-family: Roboto, Arial, sans-serif;
+  font-family: Roboto, Arial, sans-serif;
 }
 
 .basic-container {
-    padding: 5px;
-  }
-  
-  .version-info {
-    font-size: 8pt;
-    float: right;
-  }
-  
+  padding: 5px;
+}
+
+.version-info {
+  font-size: 8pt;
+  float: right;
+
+}    
+.container{
+    
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    text-align: center;
+}
+
+.container .mat-drawer{
+    
+    padding-left: 20px;
+    padding-right:  20px;
+    min-width: 200px;
+
+}
+.container .mat-drawer .mat-button {
+    
+    display: block;
+    width:100%;
+    text-align: center;
+}
+.spacer {
+    
+    flex: 1 1 auto;
+
+}
+.feed{
+  align-content:center
+}
+.mat-column-Actions {
+  flex: 0 0 100px !important;
+  white-space: unset !important;
+}
+.message-table{
+
+align-content: center;
+} */

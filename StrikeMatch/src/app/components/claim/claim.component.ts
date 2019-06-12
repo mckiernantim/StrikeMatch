@@ -1,13 +1,14 @@
 
-
+import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {take} from 'rxjs/operators';
 import { FormControl, Validators, FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import { map, } from 'rxjs/operators';
 import { Post } from './../../models/post';
 import { MatDialog } from '@angular/material';
 import { PostService } from './../../services/post.service';
 import { inject } from '@angular/core/testing';
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, Inject, NgZone, ViewChild, Pipe } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSort } from '@angular/material';
 import { MessageService } from '../../services/message.service';
 
 
@@ -22,21 +23,26 @@ import { MessageService } from '../../services/message.service';
   templateUrl: './claim.component.html',
   styleUrls: ['./claim.component.css']
 })
+
 export class ClaimComponent implements OnInit {
   
   postId: any = (localStorage.getItem("currentPost"))
   currentPost: any;
+  postsReady: boolean = false;
   body: string
   title: string;
   author: string;
   messageToSend:any = {
     author: "",
+    uid:"",
     title:"",
-    body:"",
+    body:[""],
     createdAt:"",
-    recipient:""
+    recipient:"",
+    postId:""
 
   };
+  @ViewChild(MatSort) sort: MatSort;
 
   claimWindow: FormGroup
   constructor(
@@ -55,15 +61,16 @@ export class ClaimComponent implements OnInit {
     this.dialogRef.close()
   }
   ngOnInit() {
+    
     this.ps.getPost(this.postId).subscribe(post => {
     
       this.currentPost = post
-     
-    }
+      console.log(this.currentPost)
+      this.postsReady = true
+     }
     )
 
 
-    console.log(this.currentPost)
   }
 
   ngOnAfterViewInit() {
@@ -73,20 +80,43 @@ getErrorMessage() {
       
           '';
 }
-claimRequestClicked(){
-  let currentUser = JSON.parse(localStorage.getItem('user')).uid
+claimRequestClicked(userToSendMessageTo){
   
-  console.log(currentUser)
-  this.messageToSend.body = this.claimWindow.value.messageBody;
+  let currentUser = JSON.parse(localStorage.getItem('user'))
+  
+ 
+  this.messageToSend.body.push(this.claimWindow.value.messageBody);
   this.messageToSend.title = this.claimWindow.value.messageTitle;
-  this.messageToSend.author = currentUser
-  this.messageToSend.recipient = this.currentPost.uid
+  this.messageToSend.uid = currentUser.uid
+  this.messageToSend.postId = this.postId
+  this.messageToSend.author= currentUser.displayName
+  console.log(userToSendMessageTo)
+  this.messageToSend.recipient = userToSendMessageTo
   this.messageToSend.createdAt = Date.now()
-  console.log(this.messageToSend)
+  
   this.ms.createMessage(this.messageToSend)
+  let updatedPostStatus = {
+    claimRequested: true
+  }
+  let userRequestedId = {
+    claimRequestedBy: currentUser
+  }
+  this.ps.updatePost(this.postId, updatedPostStatus)
+  this.ps.updatePost(this.postId, userRequestedId)
+  // this.ps.updatePost(, true)
+  this.currentPost = "";
   this.dialogRef.close()
 
 }
- 
+}
+export class TextFieldAutosizeTextareaExample {
+  constructor(private ngZone: NgZone) {}
 
+  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  triggerResize() {
+    // Wait for changes to be applied, then trigger textarea resize.
+    this.ngZone.onStable.pipe(take(1))
+        .subscribe(() => this.autosize.resizeToFitContent(true));
+  }
 }

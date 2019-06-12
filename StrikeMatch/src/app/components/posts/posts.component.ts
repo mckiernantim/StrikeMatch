@@ -3,10 +3,12 @@ import { AuthService } from './../../services/auth.service';
 import { postOptions } from './../../models/postOptions';
 import { Post } from './../../models/post';
 import { PostService } from './../../services/post.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm, ReactiveFormsModule, FormsModule, FormControl, Validators, FormBuilder, FormGroup } from "@angular/forms"
 import { MatDatepickerModule } from '@angular/material/datepicker'
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
+import { MatTabChangeEvent } from '@angular/material/';
+import { CurrencyIndex } from '@angular/common/src/i18n/locale_data';
 
 
 
@@ -19,6 +21,9 @@ import { DatePipe } from '@angular/common'
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit {
+  @Input() tabReset:boolean;
+  @Output()tabResetChange = new EventEmitter<number>()
+  selectedIndex: number = 0
   posts: Post[]
   rForm: FormGroup;
 
@@ -36,21 +41,22 @@ export class PostsComponent implements OnInit {
     subDepartment: "",
     category: "",
     uid: "",
+    displayName:"",
     deathDate: null,
     location: null,
     description: null,
-
   };
 
 
 
-  constructor(private ps: PostService, private as: AuthService, fb: FormBuilder) {
+  constructor(private ps: PostService, private as: AuthService, public fb: FormBuilder, public change: ChangeDetectorRef ) {
     this.rForm = fb.group({
-      title: (['']),
-      department: (['']),
-      subDepartment: ([""]),
-      category: ([""]),
+      title: '',
+      department: '',
+      subDepartment: "",
+      category: "",
       uid:JSON.parse(localStorage.getItem('user')),
+      displayName:JSON.parse(localStorage.getItem('user')),
       deathDate: null,
       description: null
 
@@ -60,16 +66,27 @@ export class PostsComponent implements OnInit {
   ngOnInit() {
     
     this.ps.getPosts().subscribe(posts => {
-      console.log(posts)
+
 
       this.posts = posts
 
     });
   }
+  tabChange(event: MatTabChangeEvent){
+    this.change.markForCheck()
+  if (event.index===2){
+    this.ps.editTabClicked()
+  }  
+  else if (event.index===0){
+   let x =this.ps.searchTabClicked()
+   console.log(x)
+   
+    console.log("got all the posts")
+
+  }
+}
   ngOnChanges(){
     this.ps.getPosts().subscribe(posts => {
-      console.log(posts)
-
       this.posts = posts
     })
   }
@@ -80,42 +97,64 @@ export class PostsComponent implements OnInit {
   
 
   modifyAndPost() {
-    console.log(this.rForm.value.department)
+    
     this.currentPost['department'] = this.rForm.value['department'];
-    console.log(this.currentPost.department)
+ 
     this.currentPost.subDepartment = this.rForm.value.subDepartment;
     this.currentPost.category = this.rForm.value.category;
     this.currentPost.deathDate = this.rForm.value.deathDate;
     this.currentPost.claimedBy = null;
     this.currentPost.uid = this.rForm.value.uid.uid
+    this.currentPost.displayName = this.rForm.value.displayName.displayName
+    
     this.currentPost.title= this.rForm.value.title;
     console.log(this.currentPost.uid)
     this.currentPost.description = this.rForm.value.description;
-    console.log(this.currentPost)
+    
+
     this.ps.createPost(this.currentPost)
+
+    this.resetPostForms();
+
   }
-  getPostInfoAndClaim(post) {
+  resetPostForms(){
+    this.postSelections = [];
+    this.currentPost.department = null;
+    this.currentPost.category = null;
+    this.currentPost.deathDate = null;
+    this.currentPost.uid=null;
+    this.currentPost.displayName=null;
+    this.currentPost.title=null;
+    this.currentPost.description=null;
+    
+    this.rForm.value.department = null;
+    this.rForm.value.category = null;
+    this.rForm.value.deathDate = null;
+    this.rForm.value.title=null;
+    this.rForm.value.description=null;
+     
+    this.postState=0;
+}
 
 
-  }
-  selectDepartment(event) {
+  selectDepartment(event:any) {
+    console.log("firing")
     this.rForm.patchValue({
       department: event.target['value']
-
     })
-
     for (let i = 0; i < postOptions.length; i++) {
 
       if (postOptions[i].department === event.target['id']) {
         console.log(event.target['id'] + " <------department name")
         this.departmentIndex = i;
         for (let j = 0; j < postOptions[i].children.length; j++) {
-          this.postSelections.push(postOptions[i].children[j].subDepartment)
-
+          this.postSelections.push(postOptions[i].children[j]['subDepartment'])
+          console.log(this.postSelections)
+          console.log("added to post selections")
         }
       }
     }
-    console.log(this.postState, this.postSelections)
+    console.log(this.postSelections)
     this.postState++
   }
   selectSubDepartment(event) {
@@ -124,12 +163,16 @@ export class PostsComponent implements OnInit {
     this.rForm.patchValue({
       subDepartment: event.target['value']
     })
-    for (let i = 0; i < postOptions.length; i++) {
-      if (lastSelection.children[i].subDepartment === event.target['id']) {
+    for (let i = 0; i < lastSelection.children.length; i++) {
+      if (lastSelection.children[i]['subDepartment'] === event.target['id']) {
         this.subDepartmentIndex = i;
-      for (let j = 0; j < lastSelection.children[i].subcategories.length; j++) {
-          this.postSelections.push(lastSelection.children[i].subcategories[j]['title'])
+      for (let j = 0; j < lastSelection.children[i]['subcategories'].length; j++) {
+        if (lastSelection.children[i]['subcategories'][j]['title'] === null){
+          this.postState++
+        }else{
+          this.postSelections.push(lastSelection.children[i]['subcategories'][j]['title'])
         }
+      }
       }
     }
     this.postState++
@@ -141,14 +184,18 @@ export class PostsComponent implements OnInit {
     this.rForm.patchValue({
       category: event.target['value']
     })
-    for (let i = 0; i < lastSelection.subcategories.length; i++) {
-      if (lastSelection.subcategories[i]['title'] === this.rForm['category']) {
-        for (let j = 0; j < lastSelection.subcategories[i]['options'].length; j++) {
-          this.postSelections.push(lastSelection.subcategories[i]['options'][j]['itemTitle'])
+    for (let i = 0; i < lastSelection['subcategories'].length; i++) {
+      if (lastSelection['subcategories'][i]['title'] === this.rForm['category']) {
+        for (let j = 0; j < lastSelection['subcategories'][i]['options'].length; j++) {
+          this.postSelections.push(lastSelection['subcategories'][i]['options'][j]['itemTitle'])
         }
       }
     }
     this.postState++
+  }
+  resetTabIndex() {
+    this.selectedIndex = 0;
+    console.log('tab index has been reset');
   }
 
 

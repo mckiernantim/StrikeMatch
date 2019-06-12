@@ -1,23 +1,77 @@
-
-<ng-container *ngIf= "messageReady" >
-  <div>
-    <button>
-      <img src="noun_back_button_952258.png" alt="back" routerLink="/messages">
-      
-    </button>
-  <h4>{{currentMessage.title}}</h4>
-  <div *ngIf="currentMessage.body.length > 0">
-    <p *ngFor="let message of currentMessage.body">{{message}}</p>
+<mat-card style="text-align:center" class="border-bottom">
+  <ng-container *ngIf="messageReady">
     <div>
-   </div>
-  </div>
-</div>
-<form  class="conversation-form">
-    <mat-form-field class="conversation-full-width">
-      <input  [(ngModel)]="responseBody" [ngModelOptions]="{standalone: true}" matInput placeholder="Type a Response">
-    </mat-form-field>
-    <button mat-button (click)="sendReply(this.responseBody)">Submit</button>
-</form>
+      <button routerLink="/messages" mat-button color="primary">Back
+
+      </button>
+      <mat-card-title class="message-title border-bottom">
+        <strong>Pickup Requst for : {{currentPost.title}}, your {{currentPost.category}} post</strong>
+        <mat-card-subtitle style="font-size:18px">confirm or deny the request</mat-card-subtitle>
+      </mat-card-title>
+      <mat-card-subtitle class="message-subtitle">
+
+      </mat-card-subtitle>
+      <mat-card-content>
+        <mat-card>
+          <div *ngIf="currentMessage.body.length > 0">
+            <mat-card-subtitle>
+              <h4>From:
+                <strong>{{currentMessage.author}} </strong>on {{currentMessage.createdAt| date}}</h4>
+
+            </mat-card-subtitle>
+            <mat-card-content>
+              <p style="font-size: 18px">{{currentMessage.title}}</p>
+              <div *ngFor="let message of currentMessage.body; let i=index">
+                <span *ngIf="displayName != message.author; else notAuthor">
+                  <div style="background-color: yellow; margin-left:auto; margin-right:0; width:50%">
+                  <p>
+                    <strong> {{message.author}}</strong> at {{message.time | date}}
+                  </p>
+                  <p>
+                    {{message.message}}
+                  </p>
+                </div>
+                </span>
+                <ng-template #notAuthor>
+                  <p>
+                    <strong> {{message.author}}</strong> at {{message.time | date}}
+                  
+                  </p>
+                  <p>{{message.message}}</p>
+                </ng-template>
 
 
-</ng-container>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <form class="conversation-form">
+                <div>
+                  <mat-form-field class="response-field">
+                    <textarea class="response-text" [(ngModel)]="responseBody" [ngModelOptions]="{standalone: true}" matInput placeholder="Type a Response"></textarea>
+                  </mat-form-field>
+                </div>
+
+
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker" [(ngModel)]="responseDate" [ngModelOptions]="{standalone: true}" placeholder="Choose a date">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <button mat-button (click)="sendReply()">Send Reply</button>
+                <ng-container *ngIf='this.isRecipient'>
+                  <button mat-button color="primary" (click)="confirmButtonClicked()">Confirm Pickup</button>
+                </ng-container>
+                <button mat-button color="warn" (click)="confirmButtonClicked()">Decline Pickup</button>
+              </form>
+            </mat-card-actions>
+
+          </div>
+        </mat-card>
+      </mat-card-content>
+    </div>
+
+
+
+
+  </ng-container>
+</mat-card>

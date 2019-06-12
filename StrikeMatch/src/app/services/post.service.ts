@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument} from "@angular/fire/firestore"
 import { Post } from '../models/post'
+import { MatTabChangeEvent } from '@angular/material/'
 import { Observable} from 'rxjs'
 import { map } from 'rxjs/operators'
 import { config } from '../config'
+
 
 
 
@@ -19,10 +21,13 @@ export class PostService {
   postsCollection: AngularFirestoreCollection<Post>
   private postDoc: AngularFirestoreDocument<Post>
   posts: Observable<any[]>
+  userOpenPosts: Post[] = [];
+  userRequestedPosts: Post[] = [];
+  userClaimedPosts:Post[]=[]
   currentUser = JSON.parse(localStorage.getItem('user'))
   currentUserPosts: Observable<any[]>
 
-  constructor(private afs: AngularFirestore, private router:Router) {
+  constructor(private afs: AngularFirestore, private router:Router, ) {
     this.postsCollection = afs.collection<Post>(config.collection_endpoint);
   
     this.posts = 
@@ -70,8 +75,7 @@ export class PostService {
       console.log(post)
       
       this.postDoc = this.afs.doc<Post>
-     
-      (`${config.collection_endpoint}/${id}`);
+       (`${config.collection_endpoint}/${id}`);
       
       if(post.description){
         this.postDoc.update({description: post.description})
@@ -80,15 +84,22 @@ export class PostService {
         this.postDoc.update({title: post.title})
       }
       if(post.deathDate){
+        console.log(post.deathDate)
         this.postDoc.update({deathDate: post.deathDate})
-      ;
-
-    }
-  }
+      }
+      if(post.claimRequested){
+        this.postDoc.update({claimRequested: post.claimRequested})
+      }
+      if(post.claimRequestedBy){
+        console.log("requested by updated" + this.currentUser["displayName"])
+        
+        this.postDoc.update({requestedBy: post.claimRequestedBy['displayName']})
+      }
+}
    createPost(post){
      
     this.postsCollection.add(post).then(()=>
-     this.router.navigate(['profile']));
+    this.router.navigate(['/dashboard']))
 
    }
    claimPost(id){
@@ -98,9 +109,15 @@ export class PostService {
   
     this.postDoc = this.afs.doc<Post>
     (`${config.collection_endpoint}/${id}`);
-    this.postDoc.update({claimedBy:`${currentUser.uid}`})
+    this.postDoc.update({claimedBy:`${currentUser.uid}`, claimedByDisplayName:`${currentUser.displayName}`})
    
     console.log(this.postDoc)
+   }
+   confirmClaim(postId, userId,){
+     this.postDoc = this.afs.doc<Post>
+     (`${config.collection_endpoint}/${postId}`);
+     this.postDoc.update({claimedBy:`${userId}`})
+     console.log(this.postDoc)
    }
    documentToDomainObject = _ => {
     const object = _.payload.doc.data();

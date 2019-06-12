@@ -1,29 +1,23 @@
-<mat-tab-group (selectedTabChange)="this.tabChange($event)">
-
-  <mat-tab label="Search Posts" click="searchTabClicked()">
-    <ng-template matTabContent>
-      <mat-icon></mat-icon>
-      <app-feed></app-feed>
-    </ng-template>
-  </mat-tab>
-
-
-  <mat-tab label="Publish Post">
-    <ng-template matTabContent>
-      <p>
-        <mat-icon>publish</mat-icon>Create new posts</p>
+<mat-card>
+  <mat-tab-group (selectedTabChange)="this.tabChange($event)">
+    <mat-tab label="Search Posts" click="searchTabClicked()">
+      <ng-template matTabContent>
+        <app-feed></app-feed>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Publish Post">
+      <ng-template matTabContent>
       <app-posts></app-posts>
-    </ng-template>
-</mat-tab>
-  
-  <mat-tab label="Edit Posts" (click)="editTabClicked()">
-    <ng-template matTabContent>
-      <mat-icon>edit</mat-icon>
-      <app-edit></app-edit>
-      <p>Grab users posts with edit function</p>
+      </ng-template>
+    </mat-tab>
 
-    </ng-template>
-  </mat-tab>
-  
+    <mat-tab label="Edit Posts" (click)="editTabClicked()">
+      <ng-template matTabContent>
+        <mat-icon>edit</mat-icon>
+        <app-edit></app-edit>
+     
 
-</mat-tab-group>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</mat-card>

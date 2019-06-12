@@ -10,9 +10,12 @@ import { Observable, Timestamp } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { config } from '../config'
 import { take } from 'rxjs/operators'
+
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class MessageService {
 
   userInbox: Observable<Message[]>;
@@ -24,9 +27,11 @@ export class MessageService {
   private messageDoc: AngularFirestoreDocument<Message>
   messageCollection: AngularFirestoreCollection<Message>
   currentUser = JSON.parse(localStorage.getItem('user'))
-  currentUserId = this.currentUser['id']
+  currentUserId = this.currentUser['uid'];
+
   currentUsername = this.currentUser['displayName']
   recipient: any
+  
   constructor(private router: Router, private afs: AngularFirestore) {
     this.messageCollection = afs.collection<Message>("messages");
     this.currentMessage = afs.doc('messages/'+this.currentMessageId).valueChanges();
@@ -34,6 +39,8 @@ export class MessageService {
       this.afs.collection('messages').snapshotChanges()
         .pipe(map(actions => actions.map(this.documentToDomainObject)))
       }
+
+      
 
   getUser(id) {
     let recipient =
@@ -52,34 +59,59 @@ export class MessageService {
   documentToUsername = _ => {
     const object = _.payload.doc.data();
     object.username = _.payload.doc.displayName;
-    console.log(object)
+   
     return object;
   }
   getUserSent() {
+    let messages:any[] = [];
     this.userSent = this.afs
-      .collection('messages', ref => ref.where('author', '==', `${this.currentUser.uid}`)).snapshotChanges()
-      .pipe(map(actions => actions.map(this.documentToDomainObject)));
-    console.log(this.currentUser)
+      .collection('messages', ref => ref.where('uid', '==', `${this.currentUser.uid}`)).snapshotChanges()
+      .pipe(map(actions => actions.map(this.documentToDomainObject)))
+        
+    this.userSent.subscribe(data => {for(let i=0; i<data.length;i++){
+
+      messages.push(data[i])
+
+    }this.afs.doc('users/'+this.currentUserId).update({
+      sentMessages: messages
+    })
+  })
+
+      
+      
+   
     return this.userSent
   }
   getUserInbox() {
+    let messages:any[]=[];
     this.userInbox = this.afs
       .collection('messages', ref => ref.where('recipient', '==', `${this.currentUser.uid}`)).snapshotChanges()
-      .pipe(map(actions => actions.map(this.documentToDomainObject)));
-    console.log(this.userInbox)
+      .pipe(map(actions => actions.map(this.documentToDomainObject)))
+ 
+  
+    this.userInbox.subscribe(data => {for(let i=0; i<data.length;i++){
+
+      messages.push(data[i])
+
+    }this.afs.doc('users/'+this.currentUserId).update({
+      inbox: messages
+    })
+  })
+
+    
+    
     return this.userInbox
 
   }
   createMessage(message) {
     this.messageCollection.add(message).then(() =>
-      this.router.navigate(['message']));
-    console.log("message sent")
+      this.router.navigate(['messages']));
+ 
 
   }
   getMessage() {
     this.refreshMessage()
-    console.log(this.currentMessageId)
-    console.log(this.currentMessage)
+
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId).valueChanges();
     return currentMessage
    }
@@ -92,6 +124,11 @@ export class MessageService {
     currentMessage.update({body:update})
 
    }
+   deleteMessage(){
+    let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
+    currentMessage.update({visible:this.currentUserId})
+   }
+   
 }
 
 

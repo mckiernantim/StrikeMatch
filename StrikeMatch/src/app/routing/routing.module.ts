@@ -1,3 +1,5 @@
+import { ConfirmComponent } from './../components/confirm/confirm.component';
+
 import { ConversationComponent } from './../components/conversation/conversation.component';
 import { SignupComponent } from './../components/sigunp/sigunp.component';
 import { VerifyEmailComponent } from './../components/verify-email/verify-email.component';
@@ -6,10 +8,6 @@ import { GuardGuard } from './../guards/guard.guard';
 import { ProfileComponent } from './../components/profile/profile.component';
 import { MessageComponent } from './../components/message/message.component';
 import { LandingComponent } from './../components/landing/landing.component';
-
-
-
-
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
@@ -68,6 +66,11 @@ const routes: Routes = [
     canActivate: [GuardGuard]
   
   },
+  {
+    path: 'confirm',
+    component: ConfirmComponent,
+    canActivate: [GuardGuard]
+  }
 ];
 
 @NgModule({

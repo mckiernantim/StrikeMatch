@@ -3,8 +3,8 @@
    <button color ="primary" mat-button routerLink="/dashboard">Dashboard</button>
    <button color="primary" mat-button routerLink="/profile">Profile</button>
    <button color="primary" mat-button routerLink="/messages">Inbox</button>
-   
-  </mat-drawer>
+  
+   </mat-drawer>
   <div class="sidenav-content">
     <mat-toolbar color="primary">
       <mat-toolbar-row>
@@ -15,9 +15,9 @@
           <span>StrikeMatch</span>
           <span class="spacer"></span>
           <mat-icon>favorite</mat-icon>
-          <button mat-icon-button (click)="authService.SignOut()"><mat-icon>favorite
-            
-          </mat-icon></button>
+          <button mat-raised-button (click)="logOut()">Logout</button>
+        
+       
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -29,8 +29,7 @@
           </mat-menu>
         </mat-toolbar-row>
       </mat-toolbar>
-    
-    <router-outlet></router-outlet>
+     <router-outlet></router-outlet>
     </div>
 </mat-drawer-container>
 

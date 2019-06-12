@@ -1,5 +1,7 @@
+import { MatCardModule } from '@angular/material';
 import { LoginComponent } from './../login/login.component';
 import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-landing',
