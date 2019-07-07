@@ -47,9 +47,12 @@ export class MessageService {
       this.afs
         .collection('users', ref => ref.where('uid', '==', id)).snapshotChanges()
         .pipe(map(actions => actions.map(this.documentToDomainObject)))
-
+       console.log(recipient)
     return recipient
 
+  }
+  checkInbox(){
+    
   }
   documentToDomainObject = _ => {
     const object = _.payload.doc.data();
@@ -76,12 +79,15 @@ export class MessageService {
       sentMessages: messages
     })
   })
-
-      
-      
-   
-    return this.userSent
+  return this.userSent
   }
+  deleteClicked(messageId) {
+    this.afs.doc('messages/'+messageId).update({
+      recipient:{
+
+      }
+    })
+  } 
   getUserInbox() {
     let messages:any[]=[];
     this.userInbox = this.afs
@@ -104,6 +110,10 @@ export class MessageService {
 
   }
   createMessage(message) {
+  
+    console.log("creating the mesage now")
+    message.body.shift()
+    console.log(message)
     this.messageCollection.add(message).then(() =>
       this.router.navigate(['messages']));
  
@@ -111,9 +121,10 @@ export class MessageService {
   }
   getMessage() {
     this.refreshMessage()
-
-    let currentMessage = this.afs.doc('messages/'+this.currentMessageId).valueChanges();
-    return currentMessage
+    let message =  this.afs.doc('messages/'+this.currentMessageId).valueChanges()
+    return message
+    
+    
    }
    refreshMessage(){
      localStorage.removeItem("currentMessage");
@@ -122,11 +133,15 @@ export class MessageService {
    updateMessage(update){
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
     currentMessage.update({body:update})
+    currentMessage.update({newContent:true})
+    currentMessage.update({visible:true})
+    console.log(currentMessage.valueChanges().subscribe())
+    return(currentMessage.valueChanges())
 
    }
    deleteMessage(){
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
-    currentMessage.update({visible:this.currentUserId})
+    currentMessage.update({deleted: this.currentUserId})
    }
    
 }

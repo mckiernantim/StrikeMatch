@@ -1,3 +1,5 @@
+import { ModalComponent } from './components/modal/modal.component';
+import { ModalService } from './services/modal.service';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -23,6 +25,7 @@ import {MatTableModule} from "@angular/material/table"
 import {MatSortModule} from "@angular/material/sort"
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTabChangeEvent} from "@angular/material/"
+
 
 
 
@@ -59,7 +62,8 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { EditComponent } from './components/edit/edit.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { ClaimComponent } from './components/claim/claim.component';
-import { ModalComponent, ModalContent } from './components/modal/modal.component';
+
+
 
 
 // login Config
@@ -89,17 +93,12 @@ export function getAuthServiceConfigs() {
     TruncatePipe,
     AppComponent,
     PostsComponent,
-
+    ModalComponent,
     ProfileComponent,
-
     LoginComponent,
-
     EmailComponent,
-
     SignupComponent,
-
     DashboardComponent,
-
     LandingComponent,
     MessageComponent,
     FeedComponent,
@@ -110,7 +109,6 @@ export function getAuthServiceConfigs() {
     ConversationComponent,
     ClaimComponent,
     ModalComponent,
-    ModalContent,
     ConfirmComponent,
 
   ],
@@ -147,10 +145,13 @@ export function getAuthServiceConfigs() {
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
+  
     ],
   entryComponents:[
     ClaimComponent,
-    ModalContent
+    ModalComponent,
+    
+  
 
   ],
   providers: [
@@ -158,6 +159,7 @@ export function getAuthServiceConfigs() {
     PostService,
     AuthService,
     LocalAuthService,
+ 
     {
       provide: AuthServiceConfig,
       useFactory: getAuthServiceConfigs

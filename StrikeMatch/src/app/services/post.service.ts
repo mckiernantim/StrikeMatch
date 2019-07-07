@@ -6,6 +6,7 @@ import { Post } from '../models/post'
 import { MatTabChangeEvent } from '@angular/material/'
 import { Observable} from 'rxjs'
 import { map } from 'rxjs/operators'
+
 import { config } from '../config'
 
 
@@ -35,30 +36,20 @@ export class PostService {
       .pipe(map(actions => actions.map(this.documentToDomainObject)));
       
    }
+   getPost(id){
+     
+    return this.afs.doc<Post>('posts/'+id).valueChanges()
+    
+   
+  }
    getPosts(){
     
      return  this.afs.collection('posts').snapshotChanges()
-     .pipe(map(actions => actions.map(this.documentToDomainObject)));
+     .pipe(map(actions => actions.map(this.documentToDomainObject)))
+     
    
    }
-    getPost(id){
-      let currentPost =
-      this.afs.doc<Post>('posts/'+id).snapshotChanges().pipe(
-        map(action => {
-          this.currentPost = action.payload.data();
-            
-           this.currentPostId= action.payload.id;
-            console.log(this.currentPostId)
-            return this.currentPost
-            
-        })
-     );
-     
-      return currentPost
-       ;
-
-    }
-    getUserPosts(){
+  getUserPosts(){
   
       this.currentUserPosts = 
       this.afs.collection('posts', ref => ref.where('uid', '==', `${this.currentUser.uid}`)).snapshotChanges()
@@ -95,6 +86,7 @@ export class PostService {
         
         this.postDoc.update({requestedBy: post.claimRequestedBy['displayName']})
       }
+      
 }
    createPost(post){
      

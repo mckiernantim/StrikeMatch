@@ -30,7 +30,7 @@
   <ng-container matColumnDef="Contact">
     <th mat-header-cell *matHeaderCellDef> Contact </th>
     <td mat-cell *matCellDef="let post">
-      <button mat-fab id="{{post.id}}" color="primary" (click)="openDialog($event.target.id)" style = "outline:none" value={{post.id}}>Claim</button>
+      <button  id="{{post.id}}" color="primary" (click)="openDialog($event.target.id)" style = "outline:none" value={{post.id}}>Claim</button>
     </td>
   
   </ng-container>

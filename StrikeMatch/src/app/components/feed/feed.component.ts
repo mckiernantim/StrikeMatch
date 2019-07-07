@@ -1,3 +1,4 @@
+import { MessageService } from './../../services/message.service';
 import { ClaimComponent } from './../claim/claim.component';
 import { PostService } from './../../services/post.service';
 import { Post } from './../../models/post';
@@ -27,14 +28,15 @@ export class TruncatePipe implements PipeTransform {
 })
 export class FeedComponent implements OnInit {
   postData: Post[] =[];
-
+  
+  
   dataSource : MatTableDataSource<any> = new MatTableDataSource;
   currentUser = JSON.parse(localStorage.getItem('user'))
   @ViewChild(MatSort) sort:MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns:string[] = ['User','Title', "Description", "Contact" ]
   posts = this.ps.getPosts();
-  constructor(private ps: PostService, public dialog:MatDialog, public change:ChangeDetectorRef) { 
+  constructor(private ps: PostService, public dialog:MatDialog, public change:ChangeDetectorRef, public ms:MessageService) { 
     
   }
   refreshPosts(){
@@ -42,17 +44,12 @@ export class FeedComponent implements OnInit {
     this.posts.subscribe(posts=>{
      
       this.postData = posts.filter(post => post.uid != `${this.currentUser.uid}` && post.claimedBy !=`${this.currentUser.uid}`);
-      console.log("on Init firing")
-      console.log(this.postData)
+     
      
       this.dataSource= new MatTableDataSource(this.postData)
-      console.log(this.dataSource)
+      
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort
-     
-   
-
-      
     });
 
   }
@@ -69,19 +66,21 @@ export class FeedComponent implements OnInit {
     }
   }
   openDialog(id) {
+  
     localStorage.setItem('currentPost', id)
-  const dialogRef = this.dialog.open(ClaimComponent, {
+   
+const dialogRef = this.dialog.open(ClaimComponent, {
       width: "1000px"
       });
     
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+     
       
     });
   }
   
  
- 
+   
 }
 
 

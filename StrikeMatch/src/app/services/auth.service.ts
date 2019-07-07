@@ -24,6 +24,7 @@ export class AuthService {
     logged in and setting up null when logged out */
     this.afAuth.authState.subscribe(user => {
       if (user) {
+        console.log("user logged in")
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user'));
@@ -81,23 +82,40 @@ export class AuthService {
 
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
+    let x;
     const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? true : false;
+    return (user !== null) ? true : false;
   }
 
   // Sign in with Google
-  GoogleAuth() {
+GoogleAuth() {
     return this.AuthLogin(new auth.GoogleAuthProvider());
   }
-
+ FacebookAuth() {
+    return this.AuthLogin(new auth.FacebookAuthProvider());
+  }
+  
+  get authenticated(): boolean {
+    console.log("")
+    return this.afAuth.authState !== null;
+  }
   // Auth logic to run auth providers
   AuthLogin(provider) {
+    console.log('authlogin')
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
+      console.log(result)
+      this.router.navigate(['dashboard'])
+    
+      console.log("heres the popup result ^^^^^")
+     
        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+         console.log("about to navigate to dashboard")
+          this.router.navigate(['dashboard'])
+          .catch((err)=> window.alert(err));
         })
       this.SetUserData(result.user);
+     
     }).catch((error) => {
       window.alert(error)
     })
@@ -127,7 +145,8 @@ export class AuthService {
   SignOut() {
     console.log('signout called')
     return this.afAuth.auth.signOut().then(() => {
-      localStorage.removeItem('user');
+   
+      localStorage.clear()
       this.router.navigate(['login']);
     })
   }

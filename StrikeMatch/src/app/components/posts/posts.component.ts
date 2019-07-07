@@ -66,10 +66,7 @@ export class PostsComponent implements OnInit {
   ngOnInit() {
     
     this.ps.getPosts().subscribe(posts => {
-
-
       this.posts = posts
-
     });
   }
   tabChange(event: MatTabChangeEvent){
@@ -97,23 +94,19 @@ export class PostsComponent implements OnInit {
   
 
   modifyAndPost() {
-    
+    // Get the post information
     this.currentPost['department'] = this.rForm.value['department'];
- 
     this.currentPost.subDepartment = this.rForm.value.subDepartment;
     this.currentPost.category = this.rForm.value.category;
     this.currentPost.deathDate = this.rForm.value.deathDate;
     this.currentPost.claimedBy = null;
     this.currentPost.uid = this.rForm.value.uid.uid
     this.currentPost.displayName = this.rForm.value.displayName.displayName
-    
     this.currentPost.title= this.rForm.value.title;
-    console.log(this.currentPost.uid)
     this.currentPost.description = this.rForm.value.description;
-    
-
+  //create new post 
     this.ps.createPost(this.currentPost)
-
+  // reset for another post
     this.resetPostForms();
 
   }
@@ -126,35 +119,32 @@ export class PostsComponent implements OnInit {
     this.currentPost.displayName=null;
     this.currentPost.title=null;
     this.currentPost.description=null;
-    
     this.rForm.value.department = null;
     this.rForm.value.category = null;
     this.rForm.value.deathDate = null;
     this.rForm.value.title=null;
     this.rForm.value.description=null;
-     
     this.postState=0;
 }
 
 
   selectDepartment(event:any) {
-    console.log("firing")
+    
     this.rForm.patchValue({
       department: event.target['value']
     })
     for (let i = 0; i < postOptions.length; i++) {
 
       if (postOptions[i].department === event.target['id']) {
-        console.log(event.target['id'] + " <------department name")
+      
         this.departmentIndex = i;
         for (let j = 0; j < postOptions[i].children.length; j++) {
           this.postSelections.push(postOptions[i].children[j]['subDepartment'])
-          console.log(this.postSelections)
-          console.log("added to post selections")
+          
         }
       }
     }
-    console.log(this.postSelections)
+   
     this.postState++
   }
   selectSubDepartment(event) {
@@ -180,7 +170,6 @@ export class PostsComponent implements OnInit {
   selectCategory(event) {
     this.postSelections = [];
     let lastSelection = postOptions[this.departmentIndex].children[this.subDepartmentIndex]
-
     this.rForm.patchValue({
       category: event.target['value']
     })
@@ -195,7 +184,6 @@ export class PostsComponent implements OnInit {
   }
   resetTabIndex() {
     this.selectedIndex = 0;
-    console.log('tab index has been reset');
   }
 
 

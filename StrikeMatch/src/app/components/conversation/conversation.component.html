@@ -1,47 +1,65 @@
 <mat-card style="text-align:center" class="border-bottom">
+
   <ng-container *ngIf="messageReady">
     <div>
-      <button routerLink="/messages" mat-button color="primary">Back
+      <button (click)="checkMessage()" mat-button color="primary">message
 
       </button>
-      <mat-card-title class="message-title border-bottom">
-        <strong>Pickup Requst for : {{currentPost.title}}, your {{currentPost.category}} post</strong>
-        <mat-card-subtitle style="font-size:18px">confirm or deny the request</mat-card-subtitle>
+      <mat-card-title class="message-title border-bottom" *ngIf="messageReady===true">
+        <strong>Pickup Request for: </strong>
+        <br>
+        <em>{{currentPost.title}}
+          <br> {{currentPost.category}} post
+        </em>
+        <mat-card-subtitle style="font-size:18px">confirm or deny this request</mat-card-subtitle>
       </mat-card-title>
       <mat-card-subtitle class="message-subtitle">
 
       </mat-card-subtitle>
       <mat-card-content>
         <mat-card>
-          <div *ngIf="currentMessage.body.length > 0">
+          <div *ngIf="messageReady">
             <mat-card-subtitle>
               <h4>From:
-                <strong>{{currentMessage.author}} </strong>on {{currentMessage.createdAt| date}}</h4>
+                <strong>{{currentMessage.author}} </strong>on {{currentMessage.createdAt.toDate()| date: 'MM/dd/yyyy'}}</h4>
 
             </mat-card-subtitle>
             <mat-card-content>
               <p style="font-size: 18px">{{currentMessage.title}}</p>
-              <div *ngFor="let message of currentMessage.body; let i=index">
-                <span *ngIf="displayName != message.author; else notAuthor">
-                  <div style="background-color: yellow; margin-left:auto; margin-right:0; width:50%">
-                  <p>
-                    <strong> {{message.author}}</strong> at {{message.time | date}}
-                  </p>
-                  <p>
-                    {{message.message}}
-                  </p>
+              <mat-card>
+                <div *ngFor="let message of currentMessage.body">
+                 <span *ngIf="displayName === message.author; else notAuthor">
+                    <mat-card-content>
+                      <div>
+                        <p>
+                          <strong> AUTHOR TEMPLATE {{message.author}}</strong> at {{message.time.toDate() | date:'MM/dd/yyyy'}}
+                       </p>
+                        <p *ngIf="message.body">
+                          {{message.body}}
+                        </p>
+                        <p>
+                          {{message.message}}
+                        </p>
+                      </div>
+                    </mat-card-content>
+                  </span>
+                  <ng-template #notAuthor >
+                    <mat-card-content style="margin-left:auto; margin-right:0; width:50%;background-color: #ebebeb; padding:10px;">
+                    
+                      <p>
+                        <strong>not author firing {{message.author}}</strong> at {{message.time.toDate() | date:'MM/dd/yyyy'}}
+
+                      </p>
+                      <p *ngIf="message.body">
+                          {{message.body}}
+                        </p>
+                      <p>{{message.message}}</p>
+                    </mat-card-content>
+                  </ng-template>
+
                 </div>
-                </span>
-                <ng-template #notAuthor>
-                  <p>
-                    <strong> {{message.author}}</strong> at {{message.time | date}}
-                  
-                  </p>
-                  <p>{{message.message}}</p>
-                </ng-template>
 
-
-              </div>
+              </mat-card>
             </mat-card-content>
             <mat-card-actions>
               <form class="conversation-form">
@@ -61,7 +79,9 @@
                 <ng-container *ngIf='this.isRecipient'>
                   <button mat-button color="primary" (click)="confirmButtonClicked()">Confirm Pickup</button>
                 </ng-container>
-                <button mat-button color="warn" (click)="confirmButtonClicked()">Decline Pickup</button>
+                <ng-container *ngIf='this.isRecipient'>
+                  <button mat-button color="warn" (click)="confirmButtonClicked()">Decline Pickup</button>
+                </ng-container>
               </form>
             </mat-card-actions>
 

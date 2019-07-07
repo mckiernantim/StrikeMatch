@@ -1,6 +1,10 @@
 <mat-card>
+  <ng-container *ngIf="newMessages">
+    <p>New MEssages!</p>
+  </ng-container>
+  
   <mat-tab-group (selectedTabChange)="this.tabChange($event)">
-    <mat-tab label="Search Posts" click="searchTabClicked()">
+    <mat-tab label="Search Posts" >
       <ng-template matTabContent>
         <app-feed></app-feed>
       </ng-template>
@@ -11,7 +15,7 @@
       </ng-template>
     </mat-tab>
 
-    <mat-tab label="Edit Posts" (click)="editTabClicked()">
+    <mat-tab label="Edit Posts" >
       <ng-template matTabContent>
         <mat-icon>edit</mat-icon>
         <app-edit></app-edit>
@@ -20,4 +24,5 @@
       </ng-template>
     </mat-tab>
   </mat-tab-group>
+  <button mat-button (click) ='isLoggedIn()'>test login</button>
 </mat-card>
