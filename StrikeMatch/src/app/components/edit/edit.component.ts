@@ -24,14 +24,14 @@ export class EditComponent implements OnInit {
   formControl: FormControl
   rForm:FormGroup
   editedPost:any;
-  
   currentPost:Post;
-  selectedPostId: string;
+  selectedPostId: string = localStorage.getItem('currentPost')
+  currentUser = JSON.parse(localStorage.getItem('user'))
   postData: Post[] =[];
   postsCollection: AngularFirestoreCollection<Post>
   currentUserPosts: Observable<any[]>
   dataSource : MatTableDataSource<any>;
-  currentUser = JSON.parse(localStorage.getItem('user'))
+  
   @ViewChild(MatSort) sort:MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns:string[] = ['Title', "Description", "Pick Up Date" , "Location", "Contact" ]
@@ -57,19 +57,26 @@ export class EditComponent implements OnInit {
 
    })
   }
+  editTabClicked(){
+    console.log("working")
+  }
   editPostClicked(event){
+    // get a new localstored post
     if(this.deleteState){
       this.deleteState = false
     }
-    console.log(event) 
-   this.currentPost = event;
-   this.editState = true;
-  (this.ps.getPost(event)).subscribe(post=>{
-    this.currentPost = post;
-    
     this.selectedPostId = event
-    console.log(this.currentPost)
-  })
+  
+  
+   this.ps.getPost(event).subscribe(data => 
+    this.currentPost=data)
+    this.editState = true;
+    console.log(this.selectedPostId)
+    this.rForm.reset()
+   
+  
+   
+   
  }
  deletePostClicked(event){
    if(this.editState){
@@ -80,8 +87,8 @@ export class EditComponent implements OnInit {
 
   this.currentPost = event;
   this.deleteState = true;
- (this.ps.getPost(event)).subscribe(post=>{
-   this.currentPost = post;
+  (this.ps.getPost(event)).subscribe(post=>{
+  //  this.currentPost = post;
    
 
    console.log(this.currentPost)
@@ -98,9 +105,15 @@ closeEditOrDelete(){
 }
 updateClicked(value){
   console.log(value)
+  console.log(this.selectedPostId)
   this.ps.updatePost(this.selectedPostId, value )
-  
- 
   this.editState = false;
+}
+applyFilter(filterValue: string) {
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  if (this.dataSource.paginator) {
+    this.dataSource.paginator.firstPage();
+  }
 }
 }

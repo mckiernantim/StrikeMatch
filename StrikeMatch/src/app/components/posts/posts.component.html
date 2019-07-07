@@ -24,13 +24,13 @@
   <mat-card-content>
 
     <div>
-      <form [formGroup]="rForm" id="createPost" (ngSubmit)="this.modifyAndPost(this.rForm)">
+      <form [formGroup]="rForm" id="createPost" (ngSubmit)="this.modifyAndPost()">
         <mat-card-content>
           <div *ngIf="postState === 0">
             <h4>Which department does this belong to?</h4>
-            <button mat-button color="primary" value="electrical" (click)="selectDepartment($event)" id="electrical">electrical</button>
-            <button mat-button color="primary" value="scenery" (click)="selectDepartment($event)" id="scenery">scenery</button>
-            <button mat-button color="primary" value="costumes" (click)="selectDepartment($event)" id="costumes">costumes</button>
+            <button color="primary" value="electrical" (click)="selectDepartment($event)" id="electrical">electrical</button>
+            <button color="primary" value="scenery" (click)="selectDepartment($event)" id="scenery">scenery</button>
+            <button color="primary" value="costumes" (click)="selectDepartment($event)" id="costumes">costumes</button>
           </div>
         </mat-card-content>
         <mat-card-content>
@@ -38,16 +38,16 @@
           <div *ngIf="postState === 1">
             <h4>Now which sub-department</h4>
             <ng-container *ngFor="let post of postSelections; let i = index">
-              <button mat-button color="primary" (click)="selectSubDepartment($event)" value={{this.postSelections[i]}} id={{post}}>{{post}}</button>
+              <button color="primary" (click)="selectSubDepartment($event)" value={{this.postSelections[i]}} id={{post}}>{{post}}</button>
             </ng-container>
-            <button mat-button color="warn" (click)="goBack()">Back</button>
+            <button color="warn" (click)="goBack()">Back</button>
           </div>
         </mat-card-content>
         <mat-card-content>
           <div *ngIf="postState === 2">
             <h4>Select the best category for your post</h4>
             <ng-container *ngFor="let post of postSelections; let i = index">
-              <button mat-button color="primary" (click)="selectCategory($event)" value={{this.postSelections[i]}} id={{post}}>{{post}}</button>
+              <button color="primary" (click)="selectCategory($event)" value={{this.postSelections[i]}} id={{post}}>{{post}}</button>
             </ng-container>
           </div>
         </mat-card-content>
@@ -67,8 +67,8 @@
             </mat-form-field>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button color="primary" type=submit>CreatePost</button>
-            <button mat-button color= "warn" type="button"(click)="resetPostForms()">StartOver</button>
+            <button color="primary" type=submit>CreatePost</button>
+            <button color= "warn" type="button"(click)="resetPostForms()">StartOver</button>
           </mat-card-actions>
         </mat-card>
 

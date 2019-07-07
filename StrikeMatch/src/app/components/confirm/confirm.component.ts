@@ -21,12 +21,18 @@ export class ConfirmComponent implements OnInit {
   ngOnInit() {
     this.postId = localStorage.getItem('currentPost')
    
-    this.ps.getPost(this.postId).subscribe(post =>
-      (
-        this.currentPost = post,
-        console.log(this.currentPost),
-        this.postReady = true)
-    )
+    // this.ps.getPost(this.postId).subscribe(post =>
+    //   (
+    //     this.currentPost = post,
+    //     this.currentPost.newContent = false,
+    //     console.log(this.currentPost),
+    //     this.postReady = true
+      
+      
+      
+    //   ),
+       
+    // )
 
 
   }

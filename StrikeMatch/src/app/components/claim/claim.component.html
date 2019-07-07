@@ -14,7 +14,7 @@
             </p>
 
             <p>Pick this up before
-              <span>{{currentPost.deathDate.toDate() | date: 'dd/MM/yyyy'}}</span>
+              <span>{{currentPost.deathDate.toDate()| date: 'MM/dd/yyyy'}}</span>
             </p>
           </mat-card-content>
         </div>
@@ -34,9 +34,10 @@
       </form>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button value="{{currentPost.uid}}" (click)="claimRequestClicked($event.target.value)">Claim</button>
+      <button mat-button value="{{currentPost.id}}" (click)="claimRequestClicked($event.target.value)">Claim</button>
       <button mat-raised-button>Cancel</button>
     </mat-dialog-actions>
   </div>
+ 
 </mat-card>
 

@@ -2,11 +2,12 @@ export interface Message {
     
     author: string;
     recipient: string;
+    recipientDisplayName:string;
     title: string;
-    body: string[];
+    body: any[];
     createdAt: Date;
     newContent: boolean;
-    visible:string[];
+    canView:string[];
     postId:string;
 
 

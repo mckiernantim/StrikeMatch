@@ -39,7 +39,8 @@ export class ClaimComponent implements OnInit {
     body:[""],
     createdAt:"",
     recipient:"",
-    postId:""
+    postId:"",
+    recipientDisplayName:"",
 
   };
   @ViewChild(MatSort) sort: MatSort;
@@ -61,16 +62,15 @@ export class ClaimComponent implements OnInit {
     this.dialogRef.close()
   }
   ngOnInit() {
-    
-    this.ps.getPost(this.postId).subscribe(post => {
-    
-      this.currentPost = post
-      console.log(this.currentPost)
-      this.postsReady = true
-     }
-    )
+      
+    this.ps.getPosts().subscribe(posts => {for (let i=0; i<posts.length; i++){
+ 
+      if (posts[i].id===this.postId){
 
-
+         this.postsReady = true
+        this.currentPost=posts[i]
+      }
+    }})
   }
 
   ngOnAfterViewInit() {
@@ -83,16 +83,21 @@ getErrorMessage() {
 claimRequestClicked(userToSendMessageTo){
   
   let currentUser = JSON.parse(localStorage.getItem('user'))
-  
- 
-  this.messageToSend.body.push(this.claimWindow.value.messageBody);
+  this.messageToSend.body.push({
+     body:this.claimWindow.value.messageBody,
+     author: currentUser.displayName,
+     time:new Date()
+    })
   this.messageToSend.title = this.claimWindow.value.messageTitle;
   this.messageToSend.uid = currentUser.uid
   this.messageToSend.postId = this.postId
   this.messageToSend.author= currentUser.displayName
-  console.log(userToSendMessageTo)
-  this.messageToSend.recipient = userToSendMessageTo
-  this.messageToSend.createdAt = Date.now()
+  // here we need to get the UID of the user who made the post and set it as recipient
+  this.messageToSend.recipient = this.currentPost.uid
+  console.log(this.currentPost.uid)
+  this.messageToSend.recipientDisplayName = this.currentPost.displayName
+ 
+  this.messageToSend.createdAt = new Date
   
   this.ms.createMessage(this.messageToSend)
   let updatedPostStatus = {
@@ -108,7 +113,16 @@ claimRequestClicked(userToSendMessageTo){
   this.dialogRef.close()
 
 }
+getRecipientUserName(user){
+  this.ms.getUser(user)
+  .subscribe(data  => {
+    
+    return data[0].displayName
+  })
+  
 }
+}
+
 export class TextFieldAutosizeTextareaExample {
   constructor(private ngZone: NgZone) {}
 

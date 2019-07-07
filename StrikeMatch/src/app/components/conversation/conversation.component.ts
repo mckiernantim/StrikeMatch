@@ -11,6 +11,7 @@ import { Message } from './../../models/message';
 import { OnInit } from '@angular/core';
 import {Component, Inject} from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDatepicker} from '@angular/material';
+import { post } from 'selenium-webdriver/http';
 
 
 
@@ -25,9 +26,11 @@ export interface DialogData {
   styleUrls: ['./conversation.component.css']
 })
 export class ConversationComponent implements OnInit {
+  messageBody:string[];
   rForm:FormGroup;
   name:any;
   content:any;
+  contentReady:boolean =false;
   user:any = JSON.parse(localStorage.getItem('user'))
   displayName:any
   isRecipient: boolean = false;
@@ -37,9 +40,8 @@ export class ConversationComponent implements OnInit {
   collecitons : AngularFirestoreCollection 
   responseBody: string;
   responseDate: string;
+  res:any={};
   responseAddress: string;
-
-
   currentPost: Post = {
     title: "",
     department: "",
@@ -53,6 +55,7 @@ export class ConversationComponent implements OnInit {
     requestedBy: null,
     claimedBy:null,
   };
+  
   messageReady: boolean = false
   constructor( public router:Router,public ms:MessageService,public icon:MatIconRegistry, fb:FormBuilder, public dialog: MatDialog, public ps:PostService) {
     
@@ -62,71 +65,71 @@ export class ConversationComponent implements OnInit {
   
   ngOnInit() {
      this.refreshMessage()
-     this.displayName= this.user['displayName']
+     console.log(this.currentMessage)
+     this.displayName = this.user['displayName']
      console.log(this.displayName)
-    
+     console.log(this.currentMessageId)
+   
   }
+ 
+  //recipient is getting wrong data here - problem coming from claim request
   refreshMessage(){
-    this.isRecipient= false;
+    
     if (this.messageReady = true){
        this.messageReady = false
     } 
-    console.log(this.currentMessageId)
-    this.ms.currentMessageId = localStorage.getItem("currentMessage")
-    console.log(this.ms.currentMessageId)
-    this.ms.getMessage().subscribe((res)=>{
-     
-     
-      this.currentMessage = res;
-      console.log(this.currentMessage)
+   this.ms.currentMessageId = localStorage.getItem("currentMessage")
+   this.ms.getMessage().subscribe((res)=>{
+    this.currentMessage = res;
+    console.log(this.currentMessage)
       
-      if(this.currentMessage.recipient === this.user['uid']){
-        console.log("match" )
-        console.log(this.user['uid'] )
-        console.log(this.currentMessage.recipient)
+    if(this.currentMessage.recipient === this.user['uid']){
         this.isRecipient= true;
-      }
-      
-      
-      console.log(this.currentMessage)
-      this.ps.getPost(this.currentMessage['postId']).subscribe((res)=>{
-        console.log(res)
-        this.currentPost=res;
-        console.log(this.currentPost)
         this.messageReady = true;
+        return (this.currentMessage)
+      }
+      this.ps.getPost(this.currentMessage['postId']).subscribe(res =>{
+        console.log(res)
+        this.res=res;
+        console.log(this.res)
+        this.messageReady=true
+        
+        console.log(this.currentMessage)
       })
     })
-   
   }
-  sendReply(){
-    console.log(this.displayName)
-    if (this.user){}
-    let currentTime = new Date;
-    console.log(this.currentMessage["body"])
-    if (Array.isArray(this.currentMessage["body"])){
-      console.log("convo is an array")
 
-    let convo =  this.currentMessage["body"]
+  sendReply(){
+  if (this.user){}
+    let currentTime = new Date;
+   if (Array.isArray(this.currentMessage["body"])){
+
+      let convo =  this.currentMessage["body"]
+ 
+      if ( this.currentMessage["body"]===""){
+        this.currentMessage.pop()
+      }
+     
+
     convo.push({
       message:" " + this.responseBody,
       author:this.user['displayName'],
-      time: Date.now()
+      time: currentTime
     })
-    console.log()
-    console.log(this.responseBody)
-    console.log(convo)
-   
-    this.ms.updateMessage(convo)
-
-
-    
-    }
+   this.currentMessage = this.ms.updateMessage(convo).subscribe(message => {
+ 
+   })
+   console.log('form reset')
+   this.responseBody=""
+    this.router.navigate(['/conversation'])
+  }
     else{
       let convo = [this.currentMessage["body"]];
       convo.push(this.responseBody)
       this.ms.updateMessage(convo);
+      console.log('form reset')
+      this.responseBody=""
       this.router.navigate(['/conversation'])
-      
     }
   }
   confirmButtonClicked(){
@@ -137,6 +140,11 @@ export class ConversationComponent implements OnInit {
    this.sendReply()
    this.router.navigate(["/confirm"])
     // this.router.navigate(["confirm"])
+  }
+  checkMessage(){
+   console.log(this.isRecipient)
+
+
   }
  
  
