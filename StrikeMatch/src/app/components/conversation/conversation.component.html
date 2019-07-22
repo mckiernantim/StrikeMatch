@@ -1,10 +1,12 @@
-<mat-card style="text-align:center" class="border-bottom">
-
-  <ng-container *ngIf="messageReady">
+<mat-card style="text-align:center" class="border-bottom main-card">
+<ng-container *ngIf="messageReady">
+  <ng-container *ngIf="claimed"> 
+    <p>message is claimed
+      </p>
+    </ng-container>
     <div>
       <button (click)="checkMessage()" mat-button color="primary">message
-
-      </button>
+       </button>
       <mat-card-title class="message-title border-bottom" *ngIf="messageReady===true">
         <strong>Pickup Request for: </strong>
         <br>
@@ -14,7 +16,6 @@
         <mat-card-subtitle style="font-size:18px">confirm or deny this request</mat-card-subtitle>
       </mat-card-title>
       <mat-card-subtitle class="message-subtitle">
-
       </mat-card-subtitle>
       <mat-card-content>
         <mat-card>
@@ -22,8 +23,7 @@
             <mat-card-subtitle>
               <h4>From:
                 <strong>{{currentMessage.author}} </strong>on {{currentMessage.createdAt.toDate()| date: 'MM/dd/yyyy'}}</h4>
-
-            </mat-card-subtitle>
+               </mat-card-subtitle>
             <mat-card-content>
               <p style="font-size: 18px">{{currentMessage.title}}</p>
               <mat-card>
@@ -32,7 +32,7 @@
                     <mat-card-content>
                       <div>
                         <p>
-                          <strong> AUTHOR TEMPLATE {{message.author}}</strong> at {{message.time.toDate() | date:'MM/dd/yyyy'}}
+                          <strong> {{message.author}}</strong> at {{message.time.toDate() | date:'MM/dd/yyyy'}}
                        </p>
                         <p *ngIf="message.body">
                           {{message.body}}
@@ -44,21 +44,17 @@
                     </mat-card-content>
                   </span>
                   <ng-template #notAuthor >
-                    <mat-card-content style="margin-left:auto; margin-right:0; width:50%;background-color: #ebebeb; padding:10px;">
-                    
+                    <mat-card-content style="margin-left:auto; margin-right:0; width:100%;background-color: #ebebeb; padding:10px; text-align:right;">
                       <p>
                         <strong>not author firing {{message.author}}</strong> at {{message.time.toDate() | date:'MM/dd/yyyy'}}
-
-                      </p>
+                       </p>
                       <p *ngIf="message.body">
                           {{message.body}}
                         </p>
                       <p>{{message.message}}</p>
                     </mat-card-content>
                   </ng-template>
-
                 </div>
-
               </mat-card>
             </mat-card-content>
             <mat-card-actions>
@@ -67,20 +63,32 @@
                   <mat-form-field class="response-field">
                     <textarea class="response-text" [(ngModel)]="responseBody" [ngModelOptions]="{standalone: true}" matInput placeholder="Type a Response"></textarea>
                   </mat-form-field>
+               
                 </div>
-
-
-                <mat-form-field>
-                  <input matInput [matDatepicker]="picker" [(ngModel)]="responseDate" [ngModelOptions]="{standalone: true}" placeholder="Choose a date">
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                <button mat-button (click)="sendReply()">Send Reply</button>
+                <div>
+                    <button mat-button (click)="sendReply()">Send Reply</button> 
+                </div>
+                <ng-container *ngIf="!claimed">
                 <ng-container *ngIf='this.isRecipient'>
-                  <button mat-button color="primary" (click)="confirmButtonClicked()">Confirm Pickup</button>
+                  <p>Schedule a Pickup if whenver you're ready.</p>
+                  <button mat-button color="primary" (click)="confirmButtonClicked()">Schedule Pickup</button>
+                 <br>
                 </ng-container>
-                <ng-container *ngIf='this.isRecipient'>
-                  <button mat-button color="warn" (click)="confirmButtonClicked()">Decline Pickup</button>
+                <mat-form-field>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="responseDate" [ngModelOptions]="{standalone: true}" placeholder="Choose a date">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="claimed">
+                    <mat-card-content>This post has a pickup scheduled for :
+                        {{currentExchange.recipient}},
+                        <br>
+                       {{currentExchange.time}}
+                       <br>
+                       {{currentExchange.location}}
+                      </mat-card-content>
+                      <button mat-button color="warn" (click ="cancelExchange()" value= "currentExchange.uid")
                 </ng-container>
               </form>
             </mat-card-actions>

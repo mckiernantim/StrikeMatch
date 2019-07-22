@@ -1,3 +1,5 @@
+import { Exchange } from './../../models/exchange';
+import { ExchangeService } from './../../services/exchange.service';
 import { PostService } from './../../services/post.service';
 import { DatePipe } from '@angular/common';
 import { Post } from './../../models/post';
@@ -15,6 +17,7 @@ import { post } from 'selenium-webdriver/http';
 
 
 
+
 export interface DialogData {
  
 }
@@ -26,6 +29,7 @@ export interface DialogData {
   styleUrls: ['./conversation.component.css']
 })
 export class ConversationComponent implements OnInit {
+  claimed:boolean =false;
   messageBody:string[];
   rForm:FormGroup;
   name:any;
@@ -42,6 +46,7 @@ export class ConversationComponent implements OnInit {
   responseDate: string;
   res:any={};
   responseAddress: string;
+  currentExchange: Exchange;
   currentPost: Post = {
     title: "",
     department: "",
@@ -56,8 +61,16 @@ export class ConversationComponent implements OnInit {
     claimedBy:null,
   };
   
+  
   messageReady: boolean = false
-  constructor( public router:Router,public ms:MessageService,public icon:MatIconRegistry, fb:FormBuilder, public dialog: MatDialog, public ps:PostService) {
+  constructor( 
+    public router:Router,
+    public ms:MessageService,
+    public icon:MatIconRegistry, 
+    public fb:FormBuilder, 
+    public dialog: MatDialog, 
+    public ps:PostService, 
+    public es:ExchangeService) {
     
    
 }
@@ -86,11 +99,38 @@ export class ConversationComponent implements OnInit {
     if(this.currentMessage.recipient === this.user['uid']){
         this.isRecipient= true;
         this.messageReady = true;
+        this.ps.getPost(this.currentMessage['postId']).subscribe(res=>{
+          this.res=res
+          if(res.claimedBy){
+      
+            this.claimed = true;
+            this.es.getUserExchanges().subscribe( res =>{
+              let exchanges = res
+             exchanges.forEach(element => {
+              if(element['postId'] === this.currentMessage['postId']){
+                let thisExchange = (exchanges[exchanges.indexOf(element)])
+                console.log(thisExchange)
+                this.currentExchange = thisExchange
+              }
+               
+             });
+            })
+            
+          }
+
+          
+          this.messageReady = true;
+          console.log(this.res)
+          return this.res
+        })
         return (this.currentMessage)
       }
       this.ps.getPost(this.currentMessage['postId']).subscribe(res =>{
         console.log(res)
         this.res=res;
+        if(!res.claimedBy){
+          this.claimed = true;
+        }
         console.log(this.res)
         this.messageReady=true
         
@@ -109,24 +149,24 @@ export class ConversationComponent implements OnInit {
       if ( this.currentMessage["body"]===""){
         this.currentMessage.pop()
       }
-     
-
-    convo.push({
+      if(this.responseBody){
+        console.log('adding to message')
+      convo.push({
       message:" " + this.responseBody,
       author:this.user['displayName'],
       time: currentTime
     })
    this.currentMessage = this.ms.updateMessage(convo).subscribe(message => {
- 
-   })
+  })
    console.log('form reset')
    this.responseBody=""
     this.router.navigate(['/conversation'])
-  }
+  }}
     else{
       let convo = [this.currentMessage["body"]];
+      if(this.responseBody){
       convo.push(this.responseBody)
-      this.ms.updateMessage(convo);
+      this.ms.updateMessage(convo)};
       console.log('form reset')
       this.responseBody=""
       this.router.navigate(['/conversation'])

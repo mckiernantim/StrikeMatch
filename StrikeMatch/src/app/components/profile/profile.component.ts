@@ -1,3 +1,4 @@
+import { ExchangeService } from './../../services/exchange.service';
 import { TruncatePipe } from './../feed/feed.component';
 import { map } from 'rxjs/operators';
 import { Post } from './../../models/post';
@@ -16,32 +17,52 @@ import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEve
 export class ProfileComponent implements OnInit {
   userOpenPosts: any[] = [];
   userRequestedPosts: any[] = [];
-  userClaimedPosts:any[]=[]
-  claimedPosts: MatTableDataSource<any> = new MatTableDataSource;
-  dataSource: MatTableDataSource<any> = new MatTableDataSource;
+  userClaimedPosts:any[]=[];
+  userPickedPosts:any[]=[]
+  userExchanges:any[] =[]
+  claimedPosts: any = [];
+  openPosts: MatTableDataSource<any> 
+  requestedPosts: MatTableDataSource<any> 
+  pickedPosts: MatTableDataSource<any> 
+  currentUser = JSON.parse(localStorage.getItem('user'))
+  userDisplayName = this.currentUser['displayName']
+
   
-  displayedColumns:string[] = ["Title", 'Description', "User"]
-  claimedTabColumns:string[] = ["Title", 'Description', "Requested By"]
-  constructor(public ps:PostService, public ms:MessageService) { }
+  displayedColumns:string[] = ["Title", 'Description', "Status"]
+  claimedTabColumns:string[] = ["Title", 'Description',"PostedBy", "Requested By"]
+  constructor(public ps:PostService, public ms:MessageService, public es:ExchangeService) { }
 
   ngOnInit() {
+    this.es.getUserExchanges().subscribe(exchanges => {
+      console.log(exchanges)
+    })
     this.ps.getUserPosts().subscribe(posts =>{
       console.log(posts)
     
       for(let i = 0 ;i < posts.length; i++){
         if(posts[i]["claimedBy"] != null){
-         
+         //posts that the user has agreed and are claimed
           this.userClaimedPosts.push(posts[i])
         }
+        //posts that are requested by someone else
         if(posts[i]["claimRequested"]===true){
          
           this.userRequestedPosts.push(posts[i])
-        }else 
+        }
+        else 
         (this.userOpenPosts.push(posts[i]))
 
       }
-      this.dataSource = new MatTableDataSource(this.userOpenPosts)
+      this.openPosts = new MatTableDataSource(this.userOpenPosts)
+      console.log(this.openPosts.data)
+      this.requestedPosts = new MatTableDataSource(this.userRequestedPosts)
       this.claimedPosts = new MatTableDataSource(this.userClaimedPosts)
+      console.log(this.claimedPosts.data)
+      this.ps.getClaimedPosts().subscribe(posts =>{
+        this.pickedPosts = new MatTableDataSource(posts)
+        console.log(this.pickedPosts.data)
+      })
+     
      
     })
     console.log(this.userOpenPosts)

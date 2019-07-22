@@ -1,3 +1,5 @@
+import { UserComponent } from './../components/user/user.component';
+import { TermsComponent } from './../components/terms/terms.component';
 import { ConfirmComponent } from './../components/confirm/confirm.component';
 
 import { ConversationComponent } from './../components/conversation/conversation.component';
@@ -8,11 +10,13 @@ import { GuardGuard } from './../guards/guard.guard';
 import { ProfileComponent } from './../components/profile/profile.component';
 import { MessageComponent } from './../components/message/message.component';
 import { LandingComponent } from './../components/landing/landing.component';
+
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { LoginComponent } from '../components/login/login.component';
 import { EmailComponent } from '../components/email/email.component';
+
 
 
 
@@ -37,6 +41,10 @@ const routes: Routes = [
 
   },
   {
+    path: 'terms',
+    component: TermsComponent,
+   },
+  {
     path: 'profile',
     component: ProfileComponent,
     canActivate:[GuardGuard]
@@ -59,6 +67,10 @@ const routes: Routes = [
   {
     path:'signup',
     component:SignupComponent,
+  },
+  {
+    path:'user',
+    component: UserComponent,
   },
   {
     path: 'conversation',

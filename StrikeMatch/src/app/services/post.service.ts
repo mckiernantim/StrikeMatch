@@ -39,16 +39,15 @@ export class PostService {
    getPost(id){
      
     return this.afs.doc<Post>('posts/'+id).valueChanges()
-    
-   
   }
+ 
    getPosts(){
     
      return  this.afs.collection('posts').snapshotChanges()
      .pipe(map(actions => actions.map(this.documentToDomainObject)))
-     
-   
-   }
+    }
+
+ 
   getUserPosts(){
   
       this.currentUserPosts = 
@@ -58,6 +57,14 @@ export class PostService {
       return this.currentUserPosts
     
      }
+  getClaimedPosts() {
+   
+    let claimedPosts = 
+      this.afs.collection('posts', ref => ref.where('requestedBy', '==', `${this.currentUser.displayName}`)).snapshotChanges()
+      .pipe(map(actions => actions.map(this.documentToDomainObject)))
+      return claimedPosts
+
+  }
      deletePost(id){
       this.afs.doc<Post>('posts/'+id).delete()
      }

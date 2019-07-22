@@ -69,6 +69,7 @@ export class ClaimComponent implements OnInit {
 
          this.postsReady = true
         this.currentPost=posts[i]
+        console.log(this.currentPost)
       }
     }})
   }

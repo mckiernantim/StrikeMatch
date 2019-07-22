@@ -3,6 +3,9 @@
     padding:1%;
 
 }
+.example-form{
+    width:45%
+}
 .post-body .mat-card-content p{
     font-size:17px;
 }
