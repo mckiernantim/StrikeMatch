@@ -135,10 +135,20 @@ export class MessageService {
     currentMessage.update({body:update})
     currentMessage.update({newContent:true})
     currentMessage.update({visible:true})
-    console.log(currentMessage.valueChanges().subscribe())
+   return(currentMessage.valueChanges())
+  }
+  contentToggle(){
+    let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
+    currentMessage.update({newContent:false})
     return(currentMessage.valueChanges())
-
-   }
+  }
+  hideMessage(){
+    
+      let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
+      currentMessage.update({visible:false})
+      return(currentMessage.valueChanges())
+    
+  }
    deleteMessage(){
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
     currentMessage.update({deleted: this.currentUserId})

@@ -1,3 +1,4 @@
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { RefreshService } from './refresh.service';
 import { Router } from '@angular/router';
 
@@ -6,6 +7,7 @@ import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PostsComponent } from './components/posts/posts.component';
 import { CommonModule } from '@angular/common';  
+
 
 
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
@@ -27,17 +29,6 @@ export class AppComponent implements OnInit {
   userName: string
 
 
-ngOnInit(): void {
-  console.log("on init")
-
-  this.currentUser = JSON.parse(localStorage.getItem("user"));
- if(this.currentUser!=""){
-  this.userName = this.currentUser['displayName']
- }
-
-
-//  this.router.navigate(['/dashboard'])
-}
 ngDoCheck(): void {
  
  
@@ -49,6 +40,9 @@ ngDoCheck(): void {
 
 refreshDom(){
   this.ref.detectChanges()
+}
+ngOnInit(): void{
+
 }
 
 

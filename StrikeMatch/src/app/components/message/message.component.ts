@@ -7,9 +7,6 @@ import { MessageService } from './../../services/message.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { map } from "rxjs/operators";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-
-
-
 import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatTable}  from "@angular/material"
 
 export interface DialogData {
@@ -46,10 +43,15 @@ export class MessageComponent implements OnInit {
   constructor(public ms:MessageService, public change:ChangeDetectorRef, public dialog: MatDialog  ) { }
 
   ngOnInit() {
+    console.log(this.messageReady)
+    console.log(this.sort)
     this.updateMessages()
     this.currentUserId = this.currentUserId;
-    this.currentUsername = this.currentUsername
+    this.currentUsername = this.currentUsername;
+    
  }
+
+ 
  openDialog(): void {
   // const dialogRef = this.dialog.open(ModalContent, {
   //   width: '250px',
@@ -67,7 +69,9 @@ export class MessageComponent implements OnInit {
       console.log(this.sort)
       this.userSent = new MatTableDataSource(messages)
       this.userSent.sort = this.sort
+      console.log(this.userSent.sort)
       console.log(this.userSent.data)
+      this.messageReady = true;
      
     })
     this.ms.getUserInbox().subscribe(messages => {
@@ -76,7 +80,7 @@ export class MessageComponent implements OnInit {
       this.userReceived.sort = this.sort
       
       this.messageReady = true;
-      console.log(this.userReceived.data)
+      console.log("messages ready")
     })
     
   }

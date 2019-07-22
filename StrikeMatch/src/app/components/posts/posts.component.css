@@ -14,3 +14,8 @@
   .center{
       text-align: center;
   }
+  .mat-card .mat-card-actions{
+    display: block;
+    text-align: right;
+
+  }
