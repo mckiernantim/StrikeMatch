@@ -27,8 +27,8 @@ export class MessageComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   userReceived: MatTableDataSource<any>;
   userSent: MatTableDataSource<any>;
-  displayedColumns:string[] = ["createdAt",'author',"title", "Delete"]
-  sentColumns:string[] = ["createdAt","recipient", "title", "Delete"]
+  displayedColumns:string[] = ["newContent","lastUpdated",'author',"title", "Delete", ]
+  sentColumns:string[] = ["lastUpdated","recipient", "title", "Delete","newContent"]
   dataSource = this.userReceived
   currentUser = JSON.parse(localStorage.getItem('user'))
   currentUserId= this.currentUser['uid']
@@ -48,6 +48,8 @@ export class MessageComponent implements OnInit {
     this.updateMessages()
     this.currentUserId = this.currentUserId;
     this.currentUsername = this.currentUsername;
+
+    
     
  }
 
@@ -66,7 +68,7 @@ export class MessageComponent implements OnInit {
   
   updateMessages(){
     this.ms.getUserSent().subscribe(messages => {
-      console.log(this.sort)
+      console.log(messages)
       this.userSent = new MatTableDataSource(messages)
       this.userSent.sort = this.sort
       console.log(this.userSent.sort)
@@ -103,6 +105,7 @@ export class MessageComponent implements OnInit {
  tabChange(event: MatTabChangeEvent){
   this.change.markForCheck()
 }
+
 
 
 }

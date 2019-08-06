@@ -45,6 +45,7 @@ export class PostsComponent implements OnInit {
     uid: "",
     displayName:"",
     deathDate: null,
+    availableDate:new Date,
     location: null,
     description: null,
   };
@@ -57,21 +58,30 @@ export class PostsComponent implements OnInit {
     public fb: FormBuilder, 
     public change: ChangeDetectorRef, 
     public snackbar:MatSnackBar ) {
-    this.rForm = fb.group({
-      title: '',
-      department: '',
-      subDepartment: "",
-      category: "",
-      uid:JSON.parse(localStorage.getItem('user')),
-      displayName:JSON.parse(localStorage.getItem('user')),
-      deathDate: null,
-      availableDate: null,
-      description: null
-    })
+   
     this.publishControl = new FormControl('',[Validators.required])
   }
 
   ngOnInit() {
+    this.rForm = new FormGroup({
+      title: new FormControl(),
+      department: new FormControl(),
+      subDepartment: new FormControl(),
+      category: new FormControl(),
+      description: new FormControl(),
+      availableDate: new FormControl(),
+      deathDate: new FormControl(),
+      displayName: new FormControl(),
+      uid: new FormControl(JSON.parse(localStorage.getItem('user'))),
+
+
+
+      // uid:new FormControl(JSON.parse(localStorage.getItem('user')),
+      // displayName:[JSON.parse(localStorage.getItem('user'))],
+      // deathDate: [null],
+      // availableDate: [null],
+      // description: [null],
+    })
     
     this.ps.getPosts().subscribe(posts => {
       this.posts = posts
@@ -96,26 +106,32 @@ export class PostsComponent implements OnInit {
     })
   }
   testPost() {
-    console.log(this.rForm.value.uid.uid)
+    console.log(this.rForm.value.uid)
+    console.log(this.rForm.value)
     console.log(this.rForm.value['department'])
+    console.log(this.rForm.value['description'])
+    console.log(this.currentPost)
   }
   
 
   modifyAndPost() {
+
     // Get the post information
     this.currentPost['department'] = this.rForm.value['department'];
     this.currentPost.subDepartment = this.rForm.value.subDepartment;
     this.currentPost.category = this.rForm.value.category;
-    this.currentPost.deathDate = this.rForm.value.deathDate;
-    this.currentPost.uid = this.rForm.value.uid.uid
-    this.currentPost.displayName = this.rForm.value.displayName.displayName
-    this.currentPost.title= this.rForm.value.title;
-    this.currentPost.description = this.rForm.value.description;
-    this.currentPost.availableDate = this.rForm.value.availableDate;
+    // this.currentPost.deathDate = this.rForm.value.deathDate;
+    let info = JSON.parse(localStorage.getItem('user'))
+    this.currentPost.uid = info['uid']
+    this.currentPost.displayName = info['displayName']
+    // this.currentPost.title= this.rForm.value.title;
+    // this.currentPost.description = this.rForm.value.description;
+    // this.currentPost.availableDate = this.rForm.value.availableDate;
     this.currentPost.claimedByDisplayName  = null;    
     this.currentPost.claimedBy = null;
     this.currentPost.claimRequested = null;
     this.currentPost.requestedBy = null;
+    console.log(this.currentPost)
     //create new post 
     this.ps.createPost(this.currentPost)
    // reset for another post

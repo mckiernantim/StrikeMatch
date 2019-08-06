@@ -120,7 +120,7 @@ export function getAuthServiceConfigs() {
     EditComponent,
     ConversationComponent,
     ClaimComponent,
-    ModalComponent,
+   UserComponent,
     ConfirmComponent,
     ExchangeComponent,
     TermsComponent,

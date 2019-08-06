@@ -14,4 +14,12 @@ table {
     z-index: 1
     
   }
+
+  .card-header{
+    text-align: left;
+    width: 100%
+  }
+  .table{
+    text-align: left
+  }
   

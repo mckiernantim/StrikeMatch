@@ -29,7 +29,7 @@ export interface DialogData {
   styleUrls: ['./conversation.component.css']
 })
 export class ConversationComponent implements OnInit {
-  claimed:boolean =false;
+  claimed:boolean = false;
   messageBody:string[];
   rForm:FormGroup;
   name:any;
@@ -72,9 +72,8 @@ export class ConversationComponent implements OnInit {
     public ps:PostService, 
     public es:ExchangeService) {
     
-   
-}
-
+   }
+  
   
   ngOnInit() {
      this.refreshMessage()
@@ -93,14 +92,19 @@ export class ConversationComponent implements OnInit {
     } 
    this.ms.currentMessageId = localStorage.getItem("currentMessage")
    this.ms.getMessage().subscribe((res)=>{
+     
+    
     this.currentMessage = res;
     console.log(this.currentMessage)
+    this.ms.contentToggle()
+    
       
     if(this.currentMessage.recipient === this.user['uid']){
         this.isRecipient= true;
         this.messageReady = true;
         this.ps.getPost(this.currentMessage['postId']).subscribe(res=>{
           this.res=res
+          console.log(res)
           if(res.claimedBy){
       
             this.claimed = true;
@@ -121,6 +125,7 @@ export class ConversationComponent implements OnInit {
           
           this.messageReady = true;
           console.log(this.res)
+
           return this.res
         })
         return (this.currentMessage)
@@ -129,7 +134,7 @@ export class ConversationComponent implements OnInit {
         console.log(res)
         this.res=res;
         if(!res.claimedBy){
-          this.claimed = true;
+          this.claimed = false;
         }
         console.log(this.res)
         this.messageReady=true

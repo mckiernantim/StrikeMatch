@@ -13,7 +13,7 @@ import { OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/cor
   changeDetection:ChangeDetectionStrategy.Default
 })
 export class NavbarComponent implements OnInit {
-
+  isLoggedIn$: boolean;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches)
@@ -23,14 +23,18 @@ export class NavbarComponent implements OnInit {
   title = 'StrikeMatch';
   currentUser = JSON.parse(localStorage.getItem("user"));
   userName: string
+  
 
 ngOnInit(): void {
   console.log("on init")
-
+  console.log(this.isLoggedIn$)
+this.isLoggedIn$ = this.authService.isLoggedIn
+console.log(this.isLoggedIn$)
   this.currentUser = JSON.parse(localStorage.getItem("user"));
  if(this.currentUser!=""){
   this.userName = this.currentUser['displayName']
  }
+ this.refreshDom()
 }
   refreshDom(){
     this.ref.detectChanges()

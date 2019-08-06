@@ -1,17 +1,22 @@
+<app-navbar>
+
+</app-navbar>
 <mat-card class="main-card">
   <mat-tab-group>
     <mat-tab label="My Schedule">
       <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{userDisplayName}}'s Schedule</mat-card-title>
+        <div class='card-header'>
+        <mat-card-header >
+          <mat-card-title class="card-header" >{{userDisplayName}}'s Schedule</mat-card-title>
           <mat-card-subtitle>Here's everything you've got coming up. </mat-card-subtitle>
         </mat-card-header>
+      </div>
         <mat-card-content *ngIf="claimedPosts.length > 0">
-          <div class="mat-elevation-z8">
+          <div>
             <mat-form-field>
               <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Posts">
             </mat-form-field>
-            <table class="mat-elevation-z8" matSort mat-table [dataSource]="claimedPosts" style="text-align:left">
+            <table class="" mat-table matSort [dataSource]="claimedPosts" style="text-align:left">
               <ng-container matColumnDef="User">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
                 <td mat-cell *matCellDef="let post">{{post.displayName}}</td>
@@ -44,13 +49,15 @@
     </mat-tab>
     <mat-tab label="Open Posts">
       <mat-card>
+        <div class="card-header">
         <mat-card-header>
           <mat-card-title>{{userDisplayName}}'s open Posts</mat-card-title>
           <mat-card-subtitle>All your items currently on the StrikeMatch feed</mat-card-subtitle>
         </mat-card-header>
+      </div>
         <mat-card-content>
           <div>
-            <table class="mat-elevation-z8" mat-table [dataSource]="openPosts" style="text-align:left; width:100%">
+            <table  mat-table [dataSource]="openPosts" class="card-header ">
               <ng-container matColumnDef="Title">
                 <th mat-header-cell *matHeaderCellDef>Title</th>
                 <td mat-cell *matCellDef="let post">{{post.title }}</td>
@@ -79,11 +86,13 @@
     </mat-tab>
     <mat-tab label="Claimed Posts">
       <mat-card>
-        <mat-card-title>{{userDisplayName}}'s claimed Posts</mat-card-title>
-        <mat-card-subtitle>All your claimed listings waiting to be picked up.</mat-card-subtitle>
+        <div class="card-header">
+        <mat-card-title >{{userDisplayName}}'s claimed Posts</mat-card-title>
+        <mat-card-subtitle >All your claimed listings waiting to be picked up.</mat-card-subtitle>
+      </div>
         <mat-card-content>
           <div>
-            <table class="mat-elevation-z8" mat-table [dataSource]="claimedPosts">
+            <table class="" mat-table [dataSource]="claimedPosts">
               <ng-container matColumnDef="Title">
                 <th mat-header-cell *matHeaderCellDef>Title</th>
                 <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false}}</td>
@@ -111,11 +120,13 @@
     <mat-tab label="Requested Posts">
       <mat-card>
         <mat-card-content>
+          <div class="card-header">
           <mat-card-title>{{userDisplayName}}'s requested Posts</mat-card-title>
           <mat-card-subtitle>All your posts with active requests.</mat-card-subtitle>
+        </div>
 
-          <div class="mat-elevation-z8">
-            <table class="mat-elevation-z8" mat-table [dataSource]="pickedPosts">
+          <div class="">
+            <table class="" mat-table [dataSource]="pickedPosts">
               <ng-container matColumnDef="Title">
                 <th mat-header-cell *matHeaderCellDef>Title</th>
                 <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false}}</td>
