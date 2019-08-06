@@ -16,7 +16,7 @@
 }
 .mat-card{
     display:block;
-    width:60%
+    width:100%
 }
 .center{
     text-align: center;
@@ -24,4 +24,16 @@
 
 .loading{
   margin:0 auto;
+}
+.card-header{
+  text-align: left;
+  width: 100%
+}
+
+.new-content-cell{
+  width:1%;
+}
+
+td{
+  text-align:left;
 }

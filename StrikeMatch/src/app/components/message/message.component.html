@@ -1,3 +1,5 @@
+<app-navbar>
+</app-navbar>
 <mat-card class="main-card">
 
   <mat-card-content>
@@ -8,22 +10,41 @@
           <div>
             <ng-container *ngIf="messageReady">
 
-              <table mat-table matSort [dataSource]="userReceived" class="data-table" layout-align="center center">
-                <ng-container matColumnDef="createdAt">
+
+
+              <table mat-table matSort matSortActive="lastUpdated" matSortDirection="desc" [dataSource]="userReceived" class="mat-elevation-z8">
+                layout-align="center center">
+                <ng-container matColumnDef="newContent">
+                  <div style="display:none" >
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell class="new-content-cell"
+                     *matCellDef="let message">
+                      <div *ngIf="message.newContent" style="background: #ebebeb">
+                        <i class="material-icons">
+                          fiber_new
+                        </i>
+                      </div>
+                    </td>
+                  </div>
+                </ng-container>
+                <ng-container matColumnDef="lastUpdated">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-                  <td mat-cell *matCellDef="let message"> {{message.createdAt.toDate() | date: "MM/dd/yyyy"}}</td>
+                  <td mat-cell *matCellDef="let message"> {{message.lastUpdated.toDate()| date: "MM/dd/yyyy"}}</td>
                 </ng-container>
                 <ng-container matColumnDef="author">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
                   <td mat-cell *matCellDef="let message"> {{message.author}} </td>
                 </ng-container>
 
+
                 <ng-container matColumnDef="title">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
                   <td mat-cell *matCellDef="let message; let i=index;">
                     <div>
-                      <button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">
-                        {{message.title}}</button>
+                      <button  mat-button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">
+                        {{message.title}}
+                      </button>
+
                     </div>
                   </td>
                 </ng-container>
@@ -32,7 +53,7 @@
                   <th mat-header-cell *matHeaderCellDef> Delete </th>
                   <td mat-cell *matCellDef="let message; let i=index;">
                     <div>
-                      <button mat-button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">Reply</button>
+                      <button mat-button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">Trash </button>
                     </div>
                   </td>
                 </ng-container>
@@ -54,9 +75,21 @@
             <div>
               <ng-container *ngIf="messageReady">
                 <table mat-table matSort [dataSource]="userSent" class="data-table" layout-align="center center">
-                  <ng-container matColumnDef="createdAt">
+                    <ng-container matColumnDef="newContent">
+                        <div style="display:none">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                          <td mat-cell *matCellDef="let message">
+                            <div *ngIf="message.newContent" style="background: #ebebeb">
+                              <i class="material-icons">
+                                fiber_new
+                              </i>
+                            </div>
+                          </td>
+                        </div>
+                      </ng-container>
+                  <ng-container matColumnDef="lastUpdated">
                     <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
-                    <td mat-cell *matCellDef="let message"> {{message.createdAt.toDate() | date: 'MM/dd/yyyy' }}</td>
+                    <td mat-cell *matCellDef="let message"> {{message.lastUpdated.toDate() | date: "MM/dd/yyyy"}}</td>
                   </ng-container>
                   <ng-container matColumnDef="recipient">
                     <th mat-header-cell mat-sort-header *matHeaderCellDef> Recipient</th>

@@ -1,5 +1,5 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
+  <mat-sidenav *ngIf="isLoggedIn$" #drawer class="sidenav" fixedInViewport="true"
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="!(isHandset$ | async)">
@@ -24,7 +24,7 @@
             email
             </i>Messages</button>
     </a>
-    <a>
+    <a *ngIf="currentUser" mat-list-item >
         <button mat-button (click)="logOut()"><i class="material-icons" >
             call_received
             </i>Logout</button>

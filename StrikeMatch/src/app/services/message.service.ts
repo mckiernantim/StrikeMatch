@@ -76,7 +76,8 @@ export class MessageService {
       messages.push(data[i])
 
     }this.afs.doc('users/'+this.currentUserId).update({
-      sentMessages: messages
+      sentMessages: messages,
+      newMessages:true
     })
   })
   return this.userSent
@@ -135,8 +136,10 @@ export class MessageService {
     currentMessage.update({body:update})
     currentMessage.update({newContent:true})
     currentMessage.update({visible:true})
+    currentMessage.update({lastUpdate:new Date})
    return(currentMessage.valueChanges())
   }
+ 
   contentToggle(){
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
     currentMessage.update({newContent:false})

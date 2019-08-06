@@ -93,6 +93,7 @@ claimRequestClicked(userToSendMessageTo){
   this.messageToSend.uid = currentUser.uid
   this.messageToSend.postId = this.postId
   this.messageToSend.author= currentUser.displayName
+  this.messageToSend.lastUpdated = new Date
   // here we need to get the UID of the user who made the post and set it as recipient
   this.messageToSend.recipient = this.currentPost.uid
   console.log(this.currentPost.uid)
