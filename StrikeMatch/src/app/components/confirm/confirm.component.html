@@ -1,3 +1,4 @@
+<app-navbar></app-navbar>
 <ng-container *ngIf="postReady">
   <mat-card class ="main-card">
    
@@ -22,14 +23,15 @@
            {{currentPost.displayName}}: {{currentPost.description}}
         </mat-card-content>
         <form [formGroup]="form"  name="exchange">
-       <mat-form-field>
-            <input matInput formControlName= "time" type="datetime-local" placeholder="schedule a pickup">
+       <mat-form-field class="confirm-controls">
+            <input matInput formControlName= "time" type="datetime-local" placeholder="select a date and time">
           </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="confirm-controls">
           <input matInput formControlName= "location" placeholder="Enter pickup location" value="">
         </mat-form-field>
       </form>
-        <button mat-raised-button  [disabled]="!form.valid" (click)="confirmClicked()" >confirm</button>
+        <button mat-button  [disabled]="!form.valid" (click)="confirmClicked()" >confirm</button>
+        <button mat-button (click)="cancel()" >Back</button>
       </mat-card>
     </div>
   </mat-card>

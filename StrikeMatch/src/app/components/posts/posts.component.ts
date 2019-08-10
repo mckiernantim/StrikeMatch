@@ -214,8 +214,9 @@ export class PostsComponent implements OnInit {
     this.selectedIndex = 0;
   }
 openUndoSnackbar(){
-  const snackBarRef = this.snackbar.open('Post Published', "action", {
-    horizontalPosition:'end'
+  const snackBarRef = this.snackbar.open('Post Published', "Confirm", {
+    horizontalPosition:'end',
+    duration: 3000
 
   })
 }
