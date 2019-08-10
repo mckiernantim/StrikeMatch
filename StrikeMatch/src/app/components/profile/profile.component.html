@@ -11,36 +11,29 @@
           <mat-card-subtitle>Here's everything you've got coming up. </mat-card-subtitle>
         </mat-card-header>
       </div>
-        <mat-card-content *ngIf="claimedPosts.length > 0">
+        <mat-card-content>
           <div>
             <mat-form-field>
               <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Posts">
             </mat-form-field>
-            <table class="" mat-table matSort [dataSource]="claimedPosts" style="text-align:left">
-              <ng-container matColumnDef="User">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
-                <td mat-cell *matCellDef="let post">{{post.displayName}}</td>
+            <table class="" mat-table matSort [dataSource]="scheduledExchanges" style="text-align:left">
+              <ng-container matColumnDef="Date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                <td mat-cell *matCellDef="let post">{{post.time}}</td>
               </ng-container>
 
-              <ng-container matColumnDef="Title">
-                <th mat-header-cell *matHeaderCellDef>Title</th>
-                <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false }}</td>
+              <ng-container matColumnDef="Location">
+                <th mat-header-cell *matHeaderCellDef>Location</th>
+                <td mat-cell *matCellDef="let post"></td>
               </ng-container>
 
-              <ng-container matColumnDef="Description">
-                <th mat-header-cell *matHeaderCellDef>Description</th>
-                <td mat-cell *matCellDef="let post">{{post.description | truncate: 20 : false}}</td>
+              <ng-container matColumnDef="Status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let post"></td>
               </ng-container>
 
-              <ng-container matColumnDef="Contact">
-                <th mat-header-cell *matHeaderCellDef> Contact </th>
-                <td mat-cell *matCellDef="let post">
-                  <button id="{{post.id}}" color="primary" (click)="openDialog($event.target.id)" style="outline:none" value={{post.id}}>Claim</button>
-                </td>
-
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef='let row; columns: displayedColumns'></tr>
+              <tr mat-header-row *matHeaderRowDef="exchangesColumns"></tr>
+              <tr mat-row *matRowDef='let row; columns: exchangesColumns'></tr>
             </table>
           </div>
           <mat-paginator [length]="this.claimedPosts.length" [pageSize]="5" [pageSizeOptions]="[5,10,25]"></mat-paginator>
@@ -60,7 +53,7 @@
             <table  mat-table [dataSource]="openPosts" class="card-header ">
               <ng-container matColumnDef="Title">
                 <th mat-header-cell *matHeaderCellDef>Title</th>
-                <td mat-cell *matCellDef="let post">{{post.title }}</td>
+                <td mat-cell *matCellDef="let post">{{post.title}}</td>
               </ng-container>
               <ng-container matColumnDef="Description">
                 <th mat-header-cell *matHeaderCellDef>Description</th>
@@ -126,7 +119,7 @@
         </div>
 
           <div class="">
-            <table class="" mat-table [dataSource]="pickedPosts">
+            <table class="" mat-table [dataSource]="requestedPosts">
               <ng-container matColumnDef="Title">
                 <th mat-header-cell *matHeaderCellDef>Title</th>
                 <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false}}</td>

@@ -1,3 +1,5 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { Observable } from 'rxjs';
 import { Message } from './../../models/message';
 import { Exchange } from './../../models/exchange';
@@ -9,6 +11,8 @@ import { Post } from './../../models/post';
 import { MessageService } from './../../services/message.service';
 import { PostService } from './../../services/post.service';
 import { Component, OnInit } from '@angular/core';
+
+
 
 
 
@@ -40,7 +44,7 @@ export class ConfirmComponent implements OnInit {
   exchangeTime: string;
   exchangeLocation: string;
 
-  constructor(public ps: PostService, public ms: MessageService, public router: Router, public es:ExchangeService, fb:FormBuilder) {
+  constructor(public ps: PostService, public ms: MessageService, public router: Router, public es:ExchangeService, fb:FormBuilder, public snackbar:MatSnackBar) {
     this.form = fb.group({
       time: new FormControl ("", Validators.required),
       location: new FormControl("", Validators.required)
@@ -96,7 +100,8 @@ export class ConfirmComponent implements OnInit {
     this.es.createExchange(exchangeData)
     this.ps.getPost(this.postId).subscribe(res =>
     res.claimedBy = res.requestedBy)
-    this.ms.contentToggle()
+   
+    this.openSnackbar()
     
     this.router.navigate(["/dashboard"]) 
    
@@ -108,5 +113,15 @@ export class ConfirmComponent implements OnInit {
 
   //   this.es.createExchange()
   }
+ cancel(){
+  this.router.navigate(['/messages'])
+ }
+ openSnackbar(){
+  const snackBarRef = this.snackbar.open('Pickup Created', "", {
+    horizontalPosition:'end',
+    duration: 3000
+
+  })
+}
 
 }

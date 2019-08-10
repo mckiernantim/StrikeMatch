@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
   postDoc: any;
   childValue: any
 
-  constructor(public ps: PostService, public change: ChangeDetectorRef, public auth: AuthService, public afs: AngularFirestore) { }
+  constructor(public ps: PostService, public change: ChangeDetectorRef, public auth: AuthService, public afs: AngularFirestore, public ms:MessageService) { }
 
   ngOnInit() {
     

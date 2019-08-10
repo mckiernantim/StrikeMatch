@@ -24,17 +24,22 @@ export class ProfileComponent implements OnInit {
   openPosts: MatTableDataSource<any> 
   requestedPosts: MatTableDataSource<any> 
   pickedPosts: MatTableDataSource<any> 
+  scheduledExchanges: MatTableDataSource<any>
   currentUser = JSON.parse(localStorage.getItem('user'))
   userDisplayName = this.currentUser['displayName']
 
   
   displayedColumns:string[] = ["Title", 'Description', "Status"]
   claimedTabColumns:string[] = ["Title", 'Description',"PostedBy", "Requested By"]
+  exchangesColumns:string[] = ["Date","Location", "Status"]
   constructor(public ps:PostService, public ms:MessageService, public es:ExchangeService) { }
 
   ngOnInit() {
     this.es.getUserExchanges().subscribe(exchanges => {
       console.log(exchanges)
+      this.userExchanges = exchanges
+      console.log(this.userExchanges)
+      this.scheduledExchanges = new MatTableDataSource(this.userExchanges)
     })
     this.ps.getUserPosts().subscribe(posts =>{
       console.log(posts)
@@ -43,14 +48,16 @@ export class ProfileComponent implements OnInit {
         if(posts[i]["claimedBy"] != null){
          //posts that the user has agreed and are claimed
           this.userClaimedPosts.push(posts[i])
+          console.log("opushed to claimed posts")
         }
         //posts that are requested by someone else
         if(posts[i]["claimRequested"]===true){
          
           this.userRequestedPosts.push(posts[i])
+          console.log("opushed to requested posts")
         }
-        else 
-        (this.userOpenPosts.push(posts[i]))
+        else (this.userOpenPosts.push(posts[i]))
+        console.log("opushed to open posts")
 
       }
       this.openPosts = new MatTableDataSource(this.userOpenPosts)

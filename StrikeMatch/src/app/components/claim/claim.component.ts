@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
 import {take} from 'rxjs/operators';
@@ -47,6 +48,7 @@ export class ClaimComponent implements OnInit {
 
   claimWindow: FormGroup
   constructor(
+    public snackbar:MatSnackBar,
     public ps: PostService, 
     public dialogRef: MatDialogRef<ClaimComponent>,
     public ms:MessageService, 
@@ -110,9 +112,14 @@ claimRequestClicked(userToSendMessageTo){
   }
   this.ps.updatePost(this.postId, updatedPostStatus)
   this.ps.updatePost(this.postId, userRequestedId)
+  console.log(this.currentPost['uid'])
+  this.ms.afs.doc('/users/'+this.currentPost['uid']).update({
+    newMessages:true
+  })
   // this.ps.updatePost(, true)
   this.currentPost = "";
   this.dialogRef.close()
+  this.openUndoSnackbar()
 
 }
 getRecipientUserName(user){
@@ -122,6 +129,13 @@ getRecipientUserName(user){
     return data[0].displayName
   })
   
+}
+openUndoSnackbar(){
+  const snackBarRef = this.snackbar.open('Message Sent', "", {
+    horizontalPosition:'end',
+    duration: 3000
+
+  })
 }
 }
 
@@ -135,4 +149,7 @@ export class TextFieldAutosizeTextareaExample {
     this.ngZone.onStable.pipe(take(1))
         .subscribe(() => this.autosize.resizeToFitContent(true));
   }
+  
+  
 }
+

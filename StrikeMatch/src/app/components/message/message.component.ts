@@ -43,16 +43,24 @@ export class MessageComponent implements OnInit {
   constructor(public ms:MessageService, public change:ChangeDetectorRef, public dialog: MatDialog  ) { }
 
   ngOnInit() {
-    console.log(this.messageReady)
-    console.log(this.sort)
+    console.log("firing init")
+    
     this.updateMessages()
     this.currentUserId = this.currentUserId;
     this.currentUsername = this.currentUsername;
+    this.resetInbox()
 
-    
-    
  }
 
+ resetInbox(){
+  console.log(this.currentUser['uid'])
+  this.ms.afs.doc('/users/'+this.currentUser['uid']).update({
+   
+    newMessages:false,
+    
+})
+  console.log('fired reset inbox')
+ }
  
  openDialog(): void {
   // const dialogRef = this.dialog.open(ModalContent, {
@@ -89,7 +97,7 @@ export class MessageComponent implements OnInit {
   getUsername(){
   
     this.ms.getUser(this.currentUserId).subscribe(data => {
-     console.log(data[0].displayName)
+     console.log(data[0])
     })
   
   }
