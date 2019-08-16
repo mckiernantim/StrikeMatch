@@ -14,8 +14,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms'
 import { PostService } from './services/post.service';
-import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatCard, MatFormFieldModule, MatSelect, MatSelectModule, MatDialogModule, MatListModule } from "@angular/material"
-import {MatButtonModule} from "@angular/material/button"
+
+import { MatInputModule, MatPaginatorModule, 
+  MatProgressSpinnerModule, 
+  MatDatepickerModule,
+  MatNativeDateModule, 
+  MatCardModule, 
+  MatCard, 
+  MatFormFieldModule, 
+  MatSelect, 
+  MatSelectModule, 
+  MatDialogModule, 
+  MatListModule, 
+  MatTooltipModule } from "@angular/material"
+
+  import {MatButtonModule} from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { MatSidenavModule } from "@angular/material/sidenav"
 import { MatToolbarModule } from "@angular/material/toolbar"
@@ -151,6 +164,7 @@ export function getAuthServiceConfigs() {
     MatSortModule,
     MatDialogModule,
     MatTableModule,
+    MatTooltipModule,
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,

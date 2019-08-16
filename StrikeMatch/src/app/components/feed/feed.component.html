@@ -1,52 +1,73 @@
-<ng-container *ngIf = "dataReady">
+<ng-container *ngIf="dataReady">
 
- <div class = "mat-elevation-z8">
+  <div class="mat-elevation-z8">
     <mat-form-field>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Posts">
-      </mat-form-field>
-  <table matSort mat-table [dataSource]="dataSource" style="text-align:left">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Posts">
+    </mat-form-field>
+    <div class="filter-feed">
+      <button mat-raised-button  matTooltip="Electrical" 
+      aria-label="Button that displays a tooltip in various positions" 
+      (click)="toggleDepartment($event)" value="electrical" 
+      color='primary' class = "department-button">
+      <i class="material-icons md-48 md-light">
+          power
+          </i></button>
+        
+      <button mat-raised-button matTooltip="Scenery"  value="scenery" color="primary" (click)="toggleDepartment($event)" class = "department-button"><i class="material-icons md-48 md-light">
+          location_city
+          </i></button>
+      <button mat-raised-button matTooltip="Costumes" value="costumes" color=primary (click)="toggleDepartment($event)" class = "department-button"><i class="material-icons md-48 md-light">
+    people
+          </i></button>
+      <button mat-button color="warn" (click)="clearFilter()" class="department-button">Reset</button>
+    </div>
+    <div *ngIf="currentDepartment">
+     SubDepartment: <button *ngFor="let selection of subDepartmentSelections" (click)="toggleSubDepartment($event)" mat-button color='primary' value="{{selection}}">{{selection}}</button>
+    </div>
+ 
+    <table matSort mat-table [dataSource]="dataSource" style="text-align:left">
       <ng-container matColumnDef="User">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
-          <td mat-cell *matCellDef="let post">{{post.displayName}}</td>
-       </ng-container>
+        <td mat-cell *matCellDef="let post">{{post.displayName}}</td>
+      </ng-container>
 
-  <ng-container matColumnDef="Title">
-    <th mat-header-cell *matHeaderCellDef>Title</th>
-    <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false }}</td>
- </ng-container>
+      <ng-container matColumnDef="Title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let post">{{post.title | truncate:25 :true }}</td>
+      </ng-container>
 
-  <ng-container matColumnDef="Description">
-    <th mat-header-cell *matHeaderCellDef >Description</th>
-    <td mat-cell *matCellDef="let post">{{post.description | truncate: 20 : false}}</td>
-  </ng-container>
+      <ng-container matColumnDef="Description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let post">{{post.description | truncate: 20 : false}}</td>
+      </ng-container>
 
-  <ng-container matColumnDef="Date Available">
-    <th mat-header-cell *matHeaderCellDef>Date Available</th>
-    <td  mat-cell *matCellDef="let post">{{post.availableDate.toDate()| date: 'MM/dd/yyyy'  }}</td>
- </ng-container>
+      <ng-container matColumnDef="Date Available">
+        <th mat-header-cell *matHeaderCellDef>Date Available</th>
+        <td mat-cell *matCellDef="let post">{{post.availableDate.toDate()| date: 'MM/dd/yyyy' }}</td>
+      </ng-container>
 
-  
 
-  <!-- <ng-container matColumnDef="Location">
+
+      <!-- <ng-container matColumnDef="Location">
   <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
   <td mat-cell *matCellDef="let post"></td>
   <td mat-footer-cell *matFooterCellDef></td>
 </ng-container> -->
 
-  <ng-container matColumnDef="Contact">
-    <th mat-header-cell *matHeaderCellDef> Contact </th>
-    <td mat-cell *matCellDef="let post">
-      <button  id="{{post.id}}" color="primary" (click)="openDialog($event.target.id)" style = "outline:none" value={{post.id}}> More Info</button>
-    </td>
-  
-  </ng-container>
+      <ng-container matColumnDef="Contact">
+        <th mat-header-cell *matHeaderCellDef> Contact </th>
+        <td mat-cell *matCellDef="let post">
+          <button id="{{post.id}}" color="primary" (click)="openDialog($event.target.id)" style="outline:none" value={{post.id}}> More Info</button>
+        </td>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef='let row; columns: displayedColumns'></tr>
-</table>
-</div>
-<mat-paginator [length]="this.postData.length" [pageSize]="5" [pageSizeOptions]="[5,10,25]" ></mat-paginator>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef='let row; columns: displayedColumns'></tr>
+    </table>
+  </div>
+  <mat-paginator [length]="this.postData.length" [pageSize]="5" [pageSizeOptions]="[5,10,25]"></mat-paginator>
 </ng-container>
 <ng-container *ngIf="!dataReady">
-<mat-spinner class = "loading"></mat-spinner>
+  <mat-spinner class="loading"></mat-spinner>
 </ng-container>
