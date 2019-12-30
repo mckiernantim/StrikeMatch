@@ -1,5 +1,7 @@
+<app-navbar></app-navbar>
 <ng-container *ngIf="postReady">
-  <mat-card>
+  <mat-card class ="main-card">
+   
     <mat-card-title>Confrim Pickup</mat-card-title>
     <div>
       <mat-card-content>
@@ -12,19 +14,24 @@
         <mat-card-title>{{currentPost.title}}</mat-card-title>
         <mat-card-title>Requested by {{currentPost.requestedBy}}</mat-card-title>
         <mat-card-subtitle>
-          Department: {{currentPost.department}} SubDepartment: {{currentPost.subDepartment}} 
+          Department: {{currentPost.department}}
+        </mat-card-subtitle>
+        <mat-card-subtitle>
+          SubDepartment: {{currentPost.subDepartment}} 
         </mat-card-subtitle>
         <mat-card-content>
-            {{currentPost.description}}
+           {{currentPost.displayName}}: {{currentPost.description}}
         </mat-card-content>
-
-
-
-        <div>
-          <p>{{currentPost.description}}</p>
-        </div>
-
-        <button mat-raised-button (click)="confirmClicked()">confirm</button>
+        <form [formGroup]="form"  name="exchange">
+       <mat-form-field class="confirm-controls">
+            <input matInput formControlName= "time" type="datetime-local" placeholder="select a date and time">
+          </mat-form-field>
+        <mat-form-field class="confirm-controls">
+          <input matInput formControlName= "location" placeholder="Enter pickup location" value="">
+        </mat-form-field>
+      </form>
+        <button mat-button  [disabled]="!form.valid" (click)="confirmClicked()" >confirm</button>
+        <button mat-button (click)="cancel()" >Back</button>
       </mat-card>
     </div>
   </mat-card>

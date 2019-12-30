@@ -33,3 +33,16 @@
     border-color: #663ab7;
 ;
   }
+
+  .main-card {
+    width: 60%;
+    margin:auto;
+    
+  }
+  .mat-form-field{
+    width:50%
+  }
+
+  .response-field{
+  
+  }

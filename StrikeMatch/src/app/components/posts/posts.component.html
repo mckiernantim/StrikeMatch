@@ -1,8 +1,12 @@
+
 <mat-card>
+    
   <mat-card-title>
-    Publish a New Post
+
+    Publish a New Post motherfucker
   </mat-card-title>
   <mat-card-subtitle>
+      <button (click)="testPost()">test post</button>
     <div *ngIf="postState > 2">
       <h4>Your current post:</h4>
       <span *ngIf="this.rForm.value.department">
@@ -55,20 +59,34 @@
           <mat-card-content class="center" *ngIf="postState === 3">
 
             <mat-form-field class="post-form">
-              <textarea matInput type=text formControlName="title" placeholder="Title your Post" value="">  </textarea>
+              <textarea matInput type=text [(ngModel)] = "this.currentPost.title" formControlName="title" placeholder="Title your Post" value="" [formControl]="publishControl">  </textarea>
+            </mat-form-field>
+            <mat-error align="end" *ngIf="publishControl.hasError('required')">
+             We need a post title
+            </mat-error>
+            <mat-form-field class="post-form">
+              <input [(ngModel)] = "this.currentPost.description" matInput type='text' formControlName="description" placeholder="describe your Post" value="" [formControl]="publishControl" id="description">
+            </mat-form-field>
+            <mat-error align="end" *ngIf="publishControl.hasError('required')">
+              Post must have a description
+            </mat-error>
+            <mat-form-field class="post-form">
+              <input matInput formControlName="availableDate" [(ngModel)] = "this.currentPost.availableDate" [min]= "minDate" [matDatepicker]="picker2" placeholder="Date Available?" [formControl]="publishControl">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+              <mat-error align="end" *ngIf="publishControl.hasError('required')">
+                Enter a Valid Date
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="post-form">
-              <input matInput type=text formControlName="description" placeholder="describe your Post" value="">
-            </mat-form-field>
-            <mat-form-field class="post-form">
-              <input matInput formControlName="deathDate" [matDatepicker]="picker" placeholder="Last pick-up date?" value="">
+              <input matInput formControlName="deathDate" [(ngModel)] = "this.currentPost.deathDate" [matDatepicker]="picker" [min]="currentPost.availableDate" placeholder="Last pick-up date?" [formControl]="publishControl">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           </mat-card-content>
           <mat-card-actions>
-            <button color="primary" type=submit>CreatePost</button>
-            <button color= "warn" type="button"(click)="resetPostForms()">StartOver</button>
+            <button color="primary" mat-button type=submit (click)="openUndoSnackbar()">CreatePost</button>
+            <button color= "warn"  mat-button type="button"(click)="resetPostForms()">StartOver</button>
           </mat-card-actions>
         </mat-card>
 

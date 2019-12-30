@@ -32,7 +32,7 @@ export class MessageService {
   currentUsername = this.currentUser['displayName']
   recipient: any
   
-  constructor(private router: Router, private afs: AngularFirestore) {
+  constructor(private router: Router, public afs: AngularFirestore) {
     this.messageCollection = afs.collection<Message>("messages");
     this.currentMessage = afs.doc('messages/'+this.currentMessageId).valueChanges();
     this.messages =
@@ -65,6 +65,9 @@ export class MessageService {
    
     return object;
   }
+  checkForNewMessages(){
+    
+  }
   getUserSent() {
     let messages:any[] = [];
     this.userSent = this.afs
@@ -75,12 +78,15 @@ export class MessageService {
 
       messages.push(data[i])
 
-    }this.afs.doc('users/'+this.currentUserId).update({
-      sentMessages: messages
+    }
+    this.afs.doc('users/'+this.currentUserId).update({
+      sentMessages: messages,
+      
     })
   })
   return this.userSent
   }
+  
   deleteClicked(messageId) {
     this.afs.doc('messages/'+messageId).update({
       recipient:{
@@ -114,8 +120,8 @@ export class MessageService {
     console.log("creating the mesage now")
     message.body.shift()
     console.log(message)
-    this.messageCollection.add(message).then(() =>
-      this.router.navigate(['messages']));
+    this.messageCollection.add(message);
+    this.afs.doc('users/'+message.recipient).update({newMessages:true})
  
 
   }
@@ -135,10 +141,36 @@ export class MessageService {
     currentMessage.update({body:update})
     currentMessage.update({newContent:true})
     currentMessage.update({visible:true})
-    console.log(currentMessage.valueChanges().subscribe())
-    return(currentMessage.valueChanges())
+    currentMessage.update({lastUpdated:new Date})
+    currentMessage.valueChanges().subscribe(res => {
+      let authorId= res['uid'];
+      let secondId = res['recipient'];
+      if(authorId === this.currentUserId){
+        console.log("fired from inside updateMessage update is authorID")
+        console.log(authorId)
+        currentMessage.update({newContent: secondId});
+        this.afs.doc('users/'+secondId).update({newMessages:true})
+ 
+      }
+      else currentMessage.update({newContent:authorId});
+      this.afs.doc('users/'+authorId).update({newMessages:true})}
+    )
 
-   }
+  }
+  toggleContent(){
+    console.log
+    let currentMessage = this.afs.doc("messages/"+this.currentMessageId);
+    currentMessage.update({newContent:""})
+  }
+ 
+  
+  hideMessage(){
+    
+      let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
+      currentMessage.update({visible:false})
+      return(currentMessage.valueChanges())
+    
+  }
    deleteMessage(){
     let currentMessage = this.afs.doc('messages/'+this.currentMessageId);
     currentMessage.update({deleted: this.currentUserId})

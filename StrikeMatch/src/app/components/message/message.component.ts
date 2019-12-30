@@ -7,9 +7,6 @@ import { MessageService } from './../../services/message.service';
 import { Component, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { map } from "rxjs/operators";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-
-
-
 import { MatSort, MatTableDataSource, MatCheckbox, MatPaginator, MatTabChangeEvent, MatTable}  from "@angular/material"
 
 export interface DialogData {
@@ -30,8 +27,8 @@ export class MessageComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   userReceived: MatTableDataSource<any>;
   userSent: MatTableDataSource<any>;
-  displayedColumns:string[] = ["createdAt",'author',"title", "Delete"]
-  sentColumns:string[] = ["createdAt","recipient", "title", "Delete"]
+  displayedColumns:string[] = ["newContent","lastUpdated",'author',"title", "Delete", ]
+  sentColumns:string[] = ["lastUpdated","recipient", "title", "Delete","newContent"]
   dataSource = this.userReceived
   currentUser = JSON.parse(localStorage.getItem('user'))
   currentUserId= this.currentUser['uid']
@@ -46,10 +43,25 @@ export class MessageComponent implements OnInit {
   constructor(public ms:MessageService, public change:ChangeDetectorRef, public dialog: MatDialog  ) { }
 
   ngOnInit() {
+    console.log("firing init")
+    
     this.updateMessages()
     this.currentUserId = this.currentUserId;
-    this.currentUsername = this.currentUsername
+    this.currentUsername = this.currentUsername;
+    this.resetInbox()
+
  }
+
+ resetInbox(){
+  console.log(this.currentUser['uid'])
+  this.ms.afs.doc('/users/'+this.currentUser['uid']).update({
+   
+    newMessages:false,
+    
+})
+  console.log('fired reset inbox')
+ }
+ 
  openDialog(): void {
   // const dialogRef = this.dialog.open(ModalContent, {
   //   width: '250px',
@@ -64,10 +76,12 @@ export class MessageComponent implements OnInit {
   
   updateMessages(){
     this.ms.getUserSent().subscribe(messages => {
-      console.log(this.sort)
+      console.log(messages)
       this.userSent = new MatTableDataSource(messages)
       this.userSent.sort = this.sort
+      console.log(this.userSent.sort)
       console.log(this.userSent.data)
+      this.messageReady = true;
      
     })
     this.ms.getUserInbox().subscribe(messages => {
@@ -76,14 +90,14 @@ export class MessageComponent implements OnInit {
       this.userReceived.sort = this.sort
       
       this.messageReady = true;
-      console.log(this.userReceived.data)
+      console.log("messages ready")
     })
     
   }
   getUsername(){
   
     this.ms.getUser(this.currentUserId).subscribe(data => {
-     console.log(data[0].displayName)
+     console.log(data[0])
     })
   
   }
@@ -99,6 +113,7 @@ export class MessageComponent implements OnInit {
  tabChange(event: MatTabChangeEvent){
   this.change.markForCheck()
 }
+
 
 
 }

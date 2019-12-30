@@ -2,7 +2,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ModalService } from './services/modal.service';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AngularFireModule } from '@angular/fire';
 // routing
 import { AppRoutingModule } from './routing/routing.module';
@@ -14,17 +14,34 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms'
 import { PostService } from './services/post.service';
-import { MatInputModule, MatPaginatorModule, MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatCard, MatFormFieldModule, MatSelect, MatSelectModule, MatDialogModule } from "@angular/material"
-import {MatButtonModule} from "@angular/material/button"
+
+import { MatInputModule, MatPaginatorModule, 
+  MatProgressSpinnerModule, 
+  MatDatepickerModule,
+  MatNativeDateModule, 
+  MatCardModule, 
+  MatCard, 
+  MatFormFieldModule, 
+  MatSelect, 
+  MatSelectModule, 
+  MatDialogModule, 
+  MatListModule, 
+  MatTooltipModule } from "@angular/material"
+
+  import {MatButtonModule} from "@angular/material/button"
 import { MatIconModule } from "@angular/material/icon"
 import { MatSidenavModule } from "@angular/material/sidenav"
 import { MatToolbarModule } from "@angular/material/toolbar"
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatMenuModule} from "@angular/material/menu"
 import {MatTabsModule} from "@angular/material/tabs"
 import {MatTableModule} from "@angular/material/table"
+
 import {MatSortModule} from "@angular/material/sort"
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTabChangeEvent} from "@angular/material/"
+
+
 
 
 
@@ -62,6 +79,12 @@ import { ForgotPasswordComponent } from './components/forgot-password/forgot-pas
 import { EditComponent } from './components/edit/edit.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { ClaimComponent } from './components/claim/claim.component';
+import { ExchangeComponent } from './exchange/exchange.component';
+import { TermsComponent } from './components/terms/terms.component';
+import { UserComponent } from './components/user/user.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { LayoutModule } from '@angular/cdk/layout';
+
 
 
 
@@ -90,8 +113,10 @@ export function getAuthServiceConfigs() {
 
 @NgModule({
   declarations: [
+   
     TruncatePipe,
     AppComponent,
+    TermsComponent,
     PostsComponent,
     ModalComponent,
     ProfileComponent,
@@ -108,8 +133,16 @@ export function getAuthServiceConfigs() {
     EditComponent,
     ConversationComponent,
     ClaimComponent,
-    ModalComponent,
+   UserComponent,
     ConfirmComponent,
+    ExchangeComponent,
+    TermsComponent,
+    UserComponent,
+    NavbarComponent,
+ 
+  
+    
+    
 
   ],
   imports: [
@@ -131,10 +164,13 @@ export function getAuthServiceConfigs() {
     MatSortModule,
     MatDialogModule,
     MatTableModule,
+    MatTooltipModule,
     MatCheckboxModule,
     MatInputModule,
     MatPaginatorModule,
     MatSortModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
     MatDialogModule,
     MatProgressSpinnerModule,
     MatDatepickerModule,
@@ -142,9 +178,14 @@ export function getAuthServiceConfigs() {
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
-    FormsModule,
+
     ReactiveFormsModule,
     MatButtonModule,
+    LayoutModule,
+    MatListModule,
+    
+
+   
   
     ],
   entryComponents:[

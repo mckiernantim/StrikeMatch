@@ -9,6 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker'
 import { DatePipe } from '@angular/common';
 import { MatTabChangeEvent } from '@angular/material/';
 import { CurrencyIndex } from '@angular/common/src/i18n/locale_data';
+import {MatSnackBar} from "@angular/material/snack-bar"
 
 
 
@@ -26,7 +27,8 @@ export class PostsComponent implements OnInit {
   selectedIndex: number = 0
   posts: Post[]
   rForm: FormGroup;
-
+  publishControl:FormControl;
+  minDate = new Date();
   currentUser: string;
   deaprtment: string;
   subDepartment: string;
@@ -43,27 +45,43 @@ export class PostsComponent implements OnInit {
     uid: "",
     displayName:"",
     deathDate: null,
+    availableDate:new Date,
     location: null,
     description: null,
   };
 
 
 
-  constructor(private ps: PostService, private as: AuthService, public fb: FormBuilder, public change: ChangeDetectorRef ) {
-    this.rForm = fb.group({
-      title: '',
-      department: '',
-      subDepartment: "",
-      category: "",
-      uid:JSON.parse(localStorage.getItem('user')),
-      displayName:JSON.parse(localStorage.getItem('user')),
-      deathDate: null,
-      description: null
-
-    })
+  constructor(
+    private ps: PostService, 
+    private as: AuthService, 
+    public fb: FormBuilder, 
+    public change: ChangeDetectorRef, 
+    public snackbar:MatSnackBar ) {
+   
+    this.publishControl = new FormControl('',[Validators.required])
   }
 
   ngOnInit() {
+    this.rForm = new FormGroup({
+      title: new FormControl(),
+      department: new FormControl(),
+      subDepartment: new FormControl(),
+      category: new FormControl(),
+      description: new FormControl(),
+      availableDate: new FormControl(),
+      deathDate: new FormControl(),
+      displayName: new FormControl(),
+      uid: new FormControl(JSON.parse(localStorage.getItem('user'))),
+
+
+
+      // uid:new FormControl(JSON.parse(localStorage.getItem('user')),
+      // displayName:[JSON.parse(localStorage.getItem('user'))],
+      // deathDate: [null],
+      // availableDate: [null],
+      // description: [null],
+    })
     
     this.ps.getPosts().subscribe(posts => {
       this.posts = posts
@@ -88,25 +106,35 @@ export class PostsComponent implements OnInit {
     })
   }
   testPost() {
-    console.log(this.rForm.value.uid.uid)
+    console.log(this.rForm.value.uid)
+    console.log(this.rForm.value)
     console.log(this.rForm.value['department'])
+    console.log(this.rForm.value['description'])
+    console.log(this.currentPost)
   }
   
 
   modifyAndPost() {
+
     // Get the post information
     this.currentPost['department'] = this.rForm.value['department'];
     this.currentPost.subDepartment = this.rForm.value.subDepartment;
     this.currentPost.category = this.rForm.value.category;
-    this.currentPost.deathDate = this.rForm.value.deathDate;
+    // this.currentPost.deathDate = this.rForm.value.deathDate;
+    let info = JSON.parse(localStorage.getItem('user'))
+    this.currentPost.uid = info['uid']
+    this.currentPost.displayName = info['displayName']
+    // this.currentPost.title= this.rForm.value.title;
+    // this.currentPost.description = this.rForm.value.description;
+    // this.currentPost.availableDate = this.rForm.value.availableDate;
+    this.currentPost.claimedByDisplayName  = null;    
     this.currentPost.claimedBy = null;
-    this.currentPost.uid = this.rForm.value.uid.uid
-    this.currentPost.displayName = this.rForm.value.displayName.displayName
-    this.currentPost.title= this.rForm.value.title;
-    this.currentPost.description = this.rForm.value.description;
-  //create new post 
+    this.currentPost.claimRequested = null;
+    this.currentPost.requestedBy = null;
+    console.log(this.currentPost)
+    //create new post 
     this.ps.createPost(this.currentPost)
-  // reset for another post
+   // reset for another post
     this.resetPostForms();
 
   }
@@ -185,7 +213,13 @@ export class PostsComponent implements OnInit {
   resetTabIndex() {
     this.selectedIndex = 0;
   }
+openUndoSnackbar(){
+  const snackBarRef = this.snackbar.open('Post Published', "Confirm", {
+    horizontalPosition:'end',
+    duration: 3000
 
+  })
+}
 
 
 

@@ -1,5 +1,5 @@
 .mat-card {
-    max-width: 80%;
+    max-width: 60%;
     margin:auto; 
     text-align: center;
   
@@ -11,4 +11,10 @@
   .mat-card-actions .flex-spacer{
     width:100%
   }
+
+  .mat-card[_ngcontent-c1] {
+    max-width: 60% !important;
+    margin: auto;
+    text-align: center;
+}
   

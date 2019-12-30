@@ -1,28 +1,47 @@
-<mat-card>
+<app-navbar></app-navbar>
+<mat-card class="main-card">
+
   <ng-container *ngIf="newMessages">
-    <p>New MEssages!</p>
+    <p>New Messages!</p>
   </ng-container>
-  
+  <mat-card-header>
+    <mat-card-title>Welcome to your the Listings Dashboard</mat-card-title>
+    <mat-card-subtitle>Publish items you're getting rid of here. See somthing you like? Reach out and set up a Pick-up.</mat-card-subtitle>
+  </mat-card-header>
   <mat-tab-group (selectedTabChange)="this.tabChange($event)">
-    <mat-tab label="Search Posts" >
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <i class="material-icons">
+          search
+        </i>
+        <p>search</p>
+      </ng-template>
       <ng-template matTabContent>
         <app-feed></app-feed>
       </ng-template>
     </mat-tab>
     <mat-tab label="Publish Post">
+      <ng-template mat-tab-label>
+        <i class="material-icons">
+          web
+        </i>
+        <p>publish</p>
+      </ng-template>
       <ng-template matTabContent>
-      <app-posts></app-posts>
+        <app-posts></app-posts>
       </ng-template>
     </mat-tab>
-
-    <mat-tab label="Edit Posts" >
+    <mat-tab label="Edit Posts">
+      <ng-template mat-tab-label>
+        <i class="material-icons">
+          edit
+        </i>
+        <p>edit</p>
+      </ng-template>
       <ng-template matTabContent>
-        <mat-icon>edit</mat-icon>
         <app-edit></app-edit>
-     
-
       </ng-template>
     </mat-tab>
   </mat-tab-group>
-  <button mat-button (click) ='isLoggedIn()'>test login</button>
+
 </mat-card>

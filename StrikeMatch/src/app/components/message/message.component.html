@@ -1,37 +1,58 @@
-<mat-card>
+<app-navbar>
+</app-navbar>
+<mat-card class="main-card">
 
   <mat-card-content>
-
     <mat-tab-group (selectedTabChange)="this.tabChange($event)">
+
       <mat-tab label="Inbox">
         <ng-template matTabContent>
           <div>
-            <ng-container>
-              <table mat-table matSort [dataSource]="userReceived" class="data-table" layout-align="center center">
-                <ng-container matColumnDef="createdAt">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-                  <td mat-cell *matCellDef="let message"> {{message.createdAt.toDate() | date: "MM/dd/yyyy"}}</td>
+            <ng-container *ngIf="messageReady">
+              <table mat-table matSort matSortActive="lastUpdated" matSortDirection="desc" [dataSource]="userReceived" class="mat-elevation-z8" style="width:100%">
+                 <ng-container matColumnDef="newContent">
+                  <div>
+                    <th  style="display:none" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                    <td mat-cell class="new-content-cell"
+                     *matCellDef="let message">
+                      <div *ngIf="message.newContent === this.currentUserId" style="background: #ebebeb">
+                        <i class="material-icons">
+                          fiber_new
+                        </i>
+                      </div>
+                    </td>
+                  </div>
+                </ng-container>
+                <ng-container matColumnDef="lastUpdated">
+                  <th style="display:none" mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                  <td mat-cell *matCellDef="let message"> {{message.lastUpdated.toDate()| date: "MM/dd/yyyy"}}</td>
                 </ng-container>
                 <ng-container matColumnDef="author">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
-                  <td mat-cell *matCellDef="let message"> {{message.author}} </td>
+                  <th style="display:none" mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+                  <td mat-cell *matCellDef="let message"> From: {{message.author}} </td>
                 </ng-container>
 
+
                 <ng-container matColumnDef="title">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                  <th style="display:none"  mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
                   <td mat-cell *matCellDef="let message; let i=index;">
                     <div>
-                      <button  style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">
-                        {{message.title}}</button>
+                      <button  mat-button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">
+                       <div>
+                         <strong>{{message.title | truncate: 15}} - </strong>
+                           <em style="color:grey"> {{message.body[0].body | truncate: 25}}</em>
+                       </div> 
+                      </button>
+
                     </div>
                   </td>
                 </ng-container>
 
                 <ng-container matColumnDef="Delete">
-                  <th mat-header-cell *matHeaderCellDef> Delete </th>
+                  <th  style="display:none"  mat-header-cell *matHeaderCellDef> Delete </th>
                   <td mat-cell *matCellDef="let message; let i=index;">
                     <div>
-                      <button mat-button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">Reply</button>
+                      <button mat-button style="outline:none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">Trash </button>
                     </div>
                   </td>
                 </ng-container>
@@ -39,40 +60,60 @@
                 <tr mat-row *matRowDef="let row;  columns: displayedColumns"></tr>
               </table>
             </ng-container>
+            <ng-container *ngIf="!messageReady">
+              <mat-spinner class="loading"></mat-spinner>
+            </ng-container>
           </div>
         </ng-template>
+
+
       </mat-tab>
       <mat-tab label="Sent Messages">
         <ng-template matTabContent>
           <mat-card>
             <div>
-              <ng-container>
+              <ng-container *ngIf="messageReady">
                 <table mat-table matSort [dataSource]="userSent" class="data-table" layout-align="center center">
-                  <ng-container matColumnDef="createdAt">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
-                    <td mat-cell *matCellDef="let message"> {{message.createdAt.toDate() | date: 'MM/dd/yyyy' }}</td>
+                    <ng-container matColumnDef="newContent">
+                        <div style="display:none">
+                          <th  style="display:none" mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                          <td mat-cell *matCellDef="let message">
+                            <div *ngIf="message.newContent === currentUserId " style="background: #ebebeb">
+                              <i class="material-icons">
+                                fiber_new
+                              </i>
+                            </div>
+                          </td>
+                        </div>
+                      </ng-container>
+                  <ng-container matColumnDef="lastUpdated">
+                    <th  style="display:none" mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+                    <td mat-cell *matCellDef="let message"> {{message.lastUpdated.toDate() | date: "MM/dd/yyyy"}}</td>
                   </ng-container>
                   <ng-container matColumnDef="recipient">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Recipient</th>
-                    <td mat-cell *matCellDef="let message"> {{message.recipientDisplayName}} </td>
+                    <th  style="display:none" mat-header-cell mat-sort-header *matHeaderCellDef> Recipient</th>
+                    <td mat-cell *matCellDef="let message"> To: {{message.recipientDisplayName}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="title">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Title </th>
+                    <th  style="display:none" mat-header-cell mat-sort-header *matHeaderCellDef> Title </th>
                     <td mat-cell *matCellDef="let message; let i=index;">
                       <div>
-                        <button  style="outline: none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">
-                          {{message.title}}</button>
-                         
+                        <button mat-button style="outline: none" color="primary" routerLink="/conversation" value="{{message.id}}" (click)="messageClicked($event.target.value)">
+                          <div>
+                              <strong>{{message.title | truncate: 15}} - </strong>
+                                <em style="color:grey"> {{message.body[0].body | truncate: 25}}</em>
+                            </div> </button>
+
                       </div>
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="Delete">
-                    <th mat-header-cell *matHeaderCellDef (click)="deleteClicked($event.target.value)"> Delete </th>
+                    <th  style="display:none" mat-header-cell *matHeaderCellDef (click)="deleteClicked($event.target.value)"> Delete </th>
                     <td mat-cell *matCellDef="let message; let i=index;">
                       <div>
 
-                   
+
                         <button style="outline:none" (click)="openDialog(dialog)">Delete</button>
 
 
@@ -84,9 +125,11 @@
                 </table>
               </ng-container>
             </div>
+            <ng-container *ngIf="!messageReady">
+              <mat-spinner class="loading"></mat-spinner>
+            </ng-container>
           </mat-card>
         </ng-template>
-
       </mat-tab>
       <div *ngIf="selectedMessage">
         <div>{{selectedMessage.data.title}}</div>
@@ -105,6 +148,8 @@
           </mat-form-field>
         </form>
       </div>
+
     </mat-tab-group>
   </mat-card-content>
+  <button (click)="getUsername()">get username </button>
 </mat-card>

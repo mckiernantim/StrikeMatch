@@ -12,3 +12,45 @@
 table {
     width: 100%;
   }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .sidenav{
+    vertical-align: auto 
+  }
+
+  ul {
+    position: fixed; 
+    z-index: 1;
+    top: auto;
+    bottom: auto;
+    left: 0;
+    /*right: 0;*/
+    margin: auto;
+    height: 200px;
+    width: 100%;
+    padding: 50px;
+   }
+
+   .mat-card {
+    max-width: 60%;
+    margin: auto;
+    text-align: center;
+}
+
+.sidenav-container {
+  height: 22% !important;
+}
+
+.main-card {
+  width: 100%;
+  max-width: 60%;
+  margin:auto; 
+  text-align: center;
+}
+.loading{
+  margin:0 auto;
+}

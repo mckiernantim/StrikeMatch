@@ -1,14 +1,18 @@
 <mat-card>
   <div *ngIf="postsReady">
     <mat-card-title>
-      <h2 mat-dialog-title > Claim Post</h2>
+      <h2 mat-dialog-title> Claim Post</h2>
     </mat-card-title>
     <mat-dialog-content>
-      <h4>{{currentPost.displayName}} shared a post in
-        <span style="text-transform:uppercase">{{currentPost.department}}</span>:</h4>
       <mat-card>
+        <mat-card-title style="text-transform:uppercase">{{currentPost.department}}</mat-card-title>
         <div class="post-body">
           <mat-card-content>
+            <h3>
+              <strong>{{currentPost.title}}
+
+              </strong>
+            </h3>
             <p>
               <strong>{{currentPost.description}}</strong>
             </p>
@@ -34,10 +38,9 @@
       </form>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button mat-button value="{{currentPost.id}}" (click)="claimRequestClicked($event.target.value)">Claim</button>
+      <button mat-button value="{{currentPost.id}}" (click)="claimRequestClicked($event.target.value)">Send</button>
       <button mat-raised-button>Cancel</button>
     </mat-dialog-actions>
   </div>
- 
-</mat-card>
 
+</mat-card>

@@ -10,6 +10,7 @@ export interface Post{
     subDepartment?:string;
     category?:string;
     deathDate?:Date;
+    availableDate?: Date;
     location?:string;
     claimRequested?:boolean;
     requestedBy?:string;

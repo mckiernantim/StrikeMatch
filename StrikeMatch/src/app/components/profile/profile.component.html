@@ -1,73 +1,149 @@
+<app-navbar>
 
+</app-navbar>
+<mat-card class="main-card">
   <mat-tab-group>
     <mat-tab label="My Schedule">
-        <mat-card>
-      <mat-card-header>
-        <mat-card-title>Your Schedule</mat-card-title>
-      <mat-card-subtitle>find your posts here</mat-card-subtitle>
-    </mat-card-header>
-      <mat-card-content>
-          <p>here's where there shit wouod be</p>
+      <mat-card>
+        <div class='card-header'>
+        <mat-card-header >
+          <mat-card-title class="card-header" >{{userDisplayName}}'s Schedule</mat-card-title>
+          <mat-card-subtitle>Here's everything you've got coming up. </mat-card-subtitle>
+        </mat-card-header>
+      </div>
+        <mat-card-content>
+          <div>
+            <mat-form-field>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Posts">
+            </mat-form-field>
+            <table class="" mat-table matSort [dataSource]="scheduledExchanges" style="text-align:left">
+              <ng-container matColumnDef="Date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+                <td mat-cell *matCellDef="let post">{{post.time}}</td>
+              </ng-container>
 
+              <ng-container matColumnDef="Location">
+                <th mat-header-cell *matHeaderCellDef>Location</th>
+                <td mat-cell *matCellDef="let post"></td>
+              </ng-container>
 
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="checkRequested()">check requested</button>
-        <button mat-button (click)="checkOpen()">check open</button>
-        <button mat-button (click)="checkClaimed()">check claimed</button>
-      </mat-card-actions>
+              <ng-container matColumnDef="Status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let post"></td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="exchangesColumns"></tr>
+              <tr mat-row *matRowDef='let row; columns: exchangesColumns'></tr>
+            </table>
+          </div>
+          <mat-paginator [length]="this.claimedPosts.length" [pageSize]="5" [pageSizeOptions]="[5,10,25]"></mat-paginator>
+        </mat-card-content>
       </mat-card>
     </mat-tab>
     <mat-tab label="Open Posts">
       <mat-card>
+        <div class="card-header">
         <mat-card-header>
-          <mat-card-title>Your Open Posts</mat-card-title>
-          <mat-card-subtitle>Manage your strikeMatch posts</mat-card-subtitle>
+          <mat-card-title>{{userDisplayName}}'s open Posts</mat-card-title>
+          <mat-card-subtitle>All your items currently on the StrikeMatch feed</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
-      <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" style ="text-align:left; width:100%">
-          <ng-container matColumnDef="Title">
-            <th mat-header-cell *matHeaderCellDef>Title</th>
-            <td mat-cell *matCellDef="let post">{{post.title }}</td>
-          </ng-container>
-          <ng-container matColumnDef="Description">
-            <th mat-header-cell *matHeaderCellDef>Description</th>
-            <td mat-cell *matCellDef="let post">{{post.description }}</td>
-          </ng-container>
-          <ng-container matColumnDef="User">
-            <th mat-header-cell *matHeaderCellDef>User</th>
-            <td mat-cell *matCellDef="let post">{{post.displayName}}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns" style="text-align:center;"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
       </div>
-    </mat-card-content>
-    </mat-card>
-
-
+        <mat-card-content>
+          <div>
+            <table  mat-table [dataSource]="openPosts" class="card-header ">
+              <ng-container matColumnDef="Title">
+                <th mat-header-cell *matHeaderCellDef>Title</th>
+                <td mat-cell *matCellDef="let post">{{post.title}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let post">{{post.description }}</td>
+              </ng-container>
+              <ng-container matColumnDef="Status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let post">
+                  <div *ngIf="post.claimRequested">
+                    Claim Requested!
+                  </div>
+                  <div *ngIf="!post.claimRequested">
+                    Claim open.
+                  </div>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns" style="text-align:center;"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </mat-tab>
     <mat-tab label="Claimed Posts">
-      <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="claimedPosts">
-          <ng-container matColumnDef="Title">
-            <th mat-header-cell *matHeaderCellDef>Title</th>
-            <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false}}</td>
-          </ng-container>
-          <ng-container matColumnDef="Description">
-            <th mat-header-cell *matHeaderCellDef>Description</th>
-            <td mat-cell *matCellDef="let post">{{post.description | truncate:25:true}}</td>
-          </ng-container>
-          <ng-container matColumnDef="Requested By">
-            <th mat-header-cell *matHeaderCellDef>Requested By</th>
-            <td mat-cell *matCellDef="let post">{{post.claimedBy | truncate:25:false}}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="claimedTabColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: claimedTabColumns"></tr>
-        </table>
+      <mat-card>
+        <div class="card-header">
+        <mat-card-title >{{userDisplayName}}'s claimed Posts</mat-card-title>
+        <mat-card-subtitle >All your claimed listings waiting to be picked up.</mat-card-subtitle>
       </div>
-
-      <p>user's posts here</p>
+        <mat-card-content>
+          <div>
+            <table class="" mat-table [dataSource]="claimedPosts">
+              <ng-container matColumnDef="Title">
+                <th mat-header-cell *matHeaderCellDef>Title</th>
+                <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let post">{{post.description | truncate:25:true}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Requested By">
+                <th mat-header-cell *matHeaderCellDef>Requested By</th>
+                <td mat-cell *matCellDef="let post">{{post.claimedBy | truncate:25:false}}</td>
+              </ng-container>
+              <ng-container matColumnDef="PostedBy">
+                <th mat-header-cell *matHeaderCellDef>Posted By
+                  <th>
+                    <td mat-cell *matCellDef="let post">{{post.displayName | truncate:25:true}}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="claimedTabColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: claimedTabColumns"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </mat-tab>
+    <mat-tab label="Requested Posts">
+      <mat-card>
+        <mat-card-content>
+          <div class="card-header">
+          <mat-card-title>{{userDisplayName}}'s requested Posts</mat-card-title>
+          <mat-card-subtitle>All your posts with active requests.</mat-card-subtitle>
+        </div>
+
+          <div class="">
+            <table class="" mat-table [dataSource]="requestedPosts">
+              <ng-container matColumnDef="Title">
+                <th mat-header-cell *matHeaderCellDef>Title</th>
+                <td mat-cell *matCellDef="let post">{{post.title | truncate:15:false}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let post">{{post.description | truncate:25:true}}</td>
+              </ng-container>
+              <ng-container matColumnDef="PostedBy">
+                <th mat-header-cell *matHeaderCellDef>Posted By
+                  <th>
+                    <td mat-cell *matCellDef="let post">{{post.displayName | truncate:25:true}}</td>
+              </ng-container>
+              <ng-container matColumnDef="Requested By">
+                <th mat-header-cell *matHeaderCellDef>Requested By</th>
+                <td mat-cell *matCellDef="let post">{{post.requestedBy | truncate:25:false}}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="claimedTabColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: claimedTabColumns"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+  </mat-card>
 
